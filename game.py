@@ -23,9 +23,17 @@ def createBoard(side):
     return board
 
 def displayBoard(board):
+    side = len(board)
+    header = [str(x) for x in range(11)]
+    header.remove("0")
+    h_str = "    " + ' '.join(header)
+    print(h_str)
+    i = 1
     for line in board:
-        l = ' '.join(line)
+        space = (4 - len(str(i))) * " "
+        l = str(i) + space + ' '.join(line)
         print(l)
+        i += 1
     return
         
 
