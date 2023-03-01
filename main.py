@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
+import game
+
 def main_menu():
     print("--- Welcome to Wana! ---\n")
     print("Select an option below:\n")
     print("A)Play Game\n")
     print("B)Rules\n")
-    print("C)Exit\n")    
+    print("C)Exit\n")
     option = input()
     if(option == "A"):
-        print("Option 1 Selected\n")
+        set_difficulty()
     elif(option == "B"):
         rules()
     elif(option == "C"):
@@ -17,6 +19,21 @@ def main_menu():
     else:
         print("Invalid Option Selected. Try Again\n")
         main_menu()
+        
+def set_difficulty():
+    print("--- Set Difficulty ---\n")
+    print("Which difficulty do you want to play in?\n")
+    print("A)Easy\nB)Medium\nC)Hard\n")
+    option = input()
+    if(option == "A"):
+        game.play(1)
+    elif(option == "B"):
+        game.play(2)
+    elif(option == "C"):
+        game.play(3)
+    else:
+        print("Invalid Input. Try Again.\n")
+        set_difficulty()
         
 def rules():
     print("-------Wana-Rules-------")
