@@ -9,7 +9,7 @@ def main_menu():
     print("C)Exit\n")
     option = input()
     if(option == "A"):
-        set_difficulty()
+        choose_mode()
     elif(option == "B"):
         rules()
     elif(option == "C"):
@@ -20,20 +20,39 @@ def main_menu():
         print("Invalid Option Selected. Try Again\n")
         main_menu()
         
-def set_difficulty():
+def choose_size():
+    print("--- Board Size ---\n")
+    print("Select the size of the board\n")
+    print("Please choose a number equal to or bigger than 9.\n")
+    print("POR IMPLEMENTAR CHOOSE_SIZE")
+        
+def choose_mode():
+    print("--- Game Mode ---\n")
+    print("Which difficulty do you want to play in?\n")
+    print("A)Player vs Player\nB)Player vs PC\n")
+    option = input()
+    if(option == "A"):
+        game.play_pvp()
+    elif(option == "B"):
+        choose_difficulty(2)
+    else:
+        print("Invalid Input. Try Again.\n")
+        choose_mode()
+        
+def choose_difficulty(mode):
     print("--- Set Difficulty ---\n")
     print("Which difficulty do you want to play in?\n")
     print("A)Easy\nB)Medium\nC)Hard\n")
     option = input()
     if(option == "A"):
-        game.play(1)
+        game.start_pve(1)
     elif(option == "B"):
-        game.play(2)
+        game.start_pve(2)
     elif(option == "C"):
-        game.play(3)
+        game.start_pve(3)
     else:
         print("Invalid Input. Try Again.\n")
-        set_difficulty()
+        choose_difficulty()
         
 def rules():
     print("-------Wana-Rules-------")
