@@ -36,8 +36,8 @@ def displayBoard(board):
         i += 1
     return
 
-def start_pvp():
-    board = createBoard(side)
+def start_pvp(boardSize):
+    board = createBoard(boardSize)
     play_pvp(board)
     
 def play_pvp(board):
@@ -105,6 +105,6 @@ def victory(player):
     
     
 
-def start_pve(difficulty):
+def start_pve(boardSize,difficulty):
     print("<Note: Right now, difficulty modes are not implemented>\n")
     
