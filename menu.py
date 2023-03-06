@@ -22,14 +22,14 @@ def main_menu():
 
 def choose_size():
     print("--- Board Size ---\n")
-    print("Select the size of the board\n")
-    print("Please choose a number equal to or bigger than 9.\n")
+    print("Select how many pieces each player will with.\n")
+    print("Please choose an even number equal to or bigger than 4.\n")
     option = input()
     if (option.isdigit()):
-        if(int(option) >= 9):
+        if(int(option) % 2 != 0 and int(option) >= 4):
             choose_mode(option)
         else:
-            print("Size should be equal or more than 9. Try again\n")
+            print("Size should be an even number equal to or bigger than 4. Try again\n")
             choose_size()
     else:
         print("Please insert a number.\n")

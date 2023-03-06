@@ -1,30 +1,33 @@
 # -*- coding: utf-8 -*-
-def createBoard(side):
-    #Assume-se que o side já foi verificado e é >= 9
-    additional = side - 9 + 1
-    additional_copy = additional
-    add_col = []
-    while (additional > 0):
-        additional += - 1
-        add_col = add_col + ['O']
-    top_medium_line = ['O','O','O','A'] + add_col + ['A','O','O','O']
-    top_line = ['/','/','/','A'] + add_col + ['A','\\', '\\', '\\']
-    bottom_line = ['\\','\\','\\','B'] + add_col + ['B','/', '/', '/']
-    bottom_medium_line = ['O','O','O','B'] + add_col + ['B','O','O','O']
-    medium_line = ['O','O','O','O'] + add_col + ['O','O','O','O']
-    board = [top_line,top_line,top_line,top_medium_line]
-    additional = additional_copy
-    medium_lines = []
-    while (additional > 0):
-        medium_lines.append(medium_line)
-        additional += -1
-    board += medium_lines
-    board += [bottom_medium_line, bottom_line, bottom_line, bottom_line]
+def createBoard(piecesPerPlayer):
+    #Assume-se que o piecesPerPlayer já foi verificado e é par e >= 4
+    upperLine =     ['/','A','O','A','\\']
+    midLineTop =    ['O','A','O','A','O']
+    midLine =       ['O','O','O','O','O']
+    midLineBottom = ['O','B','O','B','O']
+    lowerLine =     ['\\','B','O','B','/']
+    board = [upperLine,midLineTop,midLine,midLineBottom,lowerLine]
+    piecesPerPlayer = piecesPerPlayer - 4
+    while(piecesPerPlayer > 0):
+        board = extendBoard(board)
+        piecesPerPlayer -= 2
+    return board
+
+def extendBoard(board):
+    circles = (len(board) // 2)
+    firstLine = (circles * ['/']) + ['A','O','A'] + (circles * ['\\'])
+    lastLine = (circles * ['\\']) + ['B','O','B'] + (circles * ['/'])
+    i = 1
+    for line in board:
+        line.insert(0,line[0])
+        line.append(line[len(line)-1])
+    board.insert(0,firstLine)
+    board.append(lastLine)
     return board
 
 def displayBoard(board):
     side = len(board)
-    header = [str(x) for x in range(11)]
+    header = [str(x) for x in range(side + 1)]
     header.remove("0")
     h_str = "    " + ' '.join(header)
     print(h_str)
@@ -42,6 +45,7 @@ def start_pvp(boardSize):
     
 def play_pvp(board):
     print("Player 1 Turn!\n")
+    displayBoard(board)
     turn(1,board)
     if(hasLost(2,board)):
         victory(1)
