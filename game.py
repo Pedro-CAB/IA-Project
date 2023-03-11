@@ -26,11 +26,10 @@ def extendBoard(board):
 
 def displayBoard(board):
     side = len(board)
-    header = [str(x) for x in range(side + 1)]
-    header.remove("0")
+    header = [str(x) for x in range(side)]
     h_str = "    " + ' '.join(header)
     print(h_str)
-    i = 1
+    i = 0
     for line in board:
         space = (4 - len(str(i))) * " "
         l = str(i) + space + ' '.join(line)
@@ -45,27 +44,29 @@ def start_pvp(boardSize):
 def play_pvp(board):
     print("Player 1 Turn!\n")
     displayBoard(board)
-    turn(1,board)
+    board = turn(1,board)
     if(hasLost(2,board)):
         victory(1)
     else:
         print("Player 2 Turn!\n")
-        turn(2,board)
+        displayBoard(board)
+        board = turn(2,board)
         if(hasLost(1, board)):
             victory(2)
         else:
-            play_pvp()
+            play_pvp(board)
             
 def turn(player,board):
     piece = choose_piece(player,board)
-    move = choose_move(piece,board)
-    make_move(piece, move, board)
+    move = choose_move(player, piece,board)
+    board = make_move(piece, move, board)
+    return board
 
 def choose_piece(player, board):
     print("Which piece do you want to move?\n")
-    x = input("X:")
+    x = int(input("X:"))
     print("\n")
-    y = input("Y:")
+    y = int(input("Y:"))
     print("\n")
     piece = (x,y)
     if isPlayerPiece(player,board,piece):
@@ -74,34 +75,103 @@ def choose_piece(player, board):
         print("That is not a piece of yours! Try again.\n")
         choose_piece(player, board)
 
-def choose_move(piece, board):
+def choose_move(player, piece, board):
     print("Where do you want to move it?\n")
-    x = input("X:")
+    x = int(input("X:"))
     print("\n")
-    y = input("Y:")
+    y = int(input("Y:"))
     print("\n")
     move = (x,y)
     if isValidMove(piece,move,board):
         return move
     else:
         print("That is not a valid move! Try again.\n")
-        choose_piece()
+        choose_piece(player, board, piece)
         
 def make_move(piece,move,board):
     #Assumindo que o move é válido
-    pieceChar = board[piece[1]-1][piece[0]-1]
-    board[piece[1]-1][piece[0]-1] = "O"
-    board[move[1]-1][move[0]-1] = pieceChar
+    pieceChar = str(board[piece[1]][piece[0]])
+    board[piece[1]][piece[0]] = "O"
+    board[move[1]][move[0]] = pieceChar
     return board
     
-def hasLost(player):
-    print("POR IMPLEMENTAR hasLost")
-    
 def isValidMove(piece,move,board):
-    print("POR IMPLEMENTAR isValidMove")
+    return (move in calculateValidMoves(piece, board))
+    
+def calculateValidMoves(piece,board):
+    moves = []
+    increment = 1
+    depth = 1
+    moveLeft = moveRight = moveUp = moveDown = True
+    x = int(piece[0])
+    y = int(piece[1])
+    while (increment > 0):
+        increment = 0
+        newMoves = []
+        if (moveLeft):
+            newX = adjustCoordToSize(x - depth, board)
+            if (board[newX][y] == 'O'):
+                newMoves.append((newX,y))
+            else:
+                moveLeft = False
+        if (moveRight):
+            newX = adjustCoordToSize(x + depth, board)
+            if (board[newX][y] == 'O'):
+                newMoves.append((newX,y))
+            else:
+                moveRight = False
+        if (moveUp):
+            newY = adjustCoordToSize(y - depth, board)
+            if (board[x][newY] == 'O'):
+                newMoves.append((x,newY))
+            else:
+                moveUp = False
+        if (moveDown):
+            newY = adjustCoordToSize(y + depth, board)
+            if (board[x][newY] == 'O'):
+                newMoves.append((x,newY))
+            else:
+                moveDown = False
+        depth += 1
+        increment = len(newMoves)
+        moves += newMoves
+    return moves
+                
+        
+def adjustCoordToSize(coord, board):
+    size = len(board)
+    if (coord < 0):
+        while (coord < 0):
+            coord = coord + size
+        return coord
+    elif (coord >= size):
+        while (coord >= size):
+            coord = coord - size
+        return coord
+    else:
+        return coord
 
 def isPlayerPiece(player,board,piece):
-    print("POR IMPLEMENTAR isPlayerPiece")
+    if (int(player) == 1):
+        return (board[piece[0]][piece[1]] == 'A')
+    elif (player == 2):
+        return (board[piece[0]][piece[1]] == 'B')
+
+def hasLost(player,board):
+    if (player == 1):
+        char = 'A'
+    else:
+        char = 'B'
+    x = y = 0
+    for line in board:
+        for spot in line:
+            if(spot == char):
+                if(len(calculateValidMoves((x,y), board)) == 0):
+                    return True
+            x += 1
+        x = 0
+        y += 1
+    return False
 
 def victory(player):
     print("POR IMPLEMENTAR victory")
