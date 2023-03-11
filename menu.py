@@ -23,13 +23,13 @@ def main_menu():
 def choose_size():
     print("--- Board Size ---\n")
     print("Select how many pieces each player will with.\n")
-    print("Please choose an even number equal to or bigger than 4.\n")
+    print("Please choose an even number greater than or equal to 4.\n")
     option = input()
     if (option.isdigit()):
-        if(int(option) % 2 != 0 and int(option) >= 4):
+        if(int(option) % 2 == 0 and int(option) >= 4):
             choose_mode(option)
         else:
-            print("Size should be an even number equal to or bigger than 4. Try again\n")
+            print("Size should be an even number greater than or equal to 4. Try again\n")
             choose_size()
     else:
         print("Please insert a number.\n")
@@ -41,7 +41,7 @@ def choose_mode(boardSize):
     print("A)Player vs Player\nB)Player vs PC\n")
     option = input()
     if(option == "A"):
-        game.play_pvp(boardSize)
+        game.start_pvp(boardSize)
     elif(option == "B"):
         choose_difficulty(boardSize)
     else:

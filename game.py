@@ -7,7 +7,7 @@ def createBoard(piecesPerPlayer):
     midLineBottom = ['O','B','O','B','O']
     lowerLine =     ['\\','B','O','B','/']
     board = [upperLine,midLineTop,midLine,midLineBottom,lowerLine]
-    piecesPerPlayer = piecesPerPlayer - 4
+    piecesPerPlayer = int(piecesPerPlayer) - 4
     while(piecesPerPlayer > 0):
         board = extendBoard(board)
         piecesPerPlayer -= 2
@@ -17,7 +17,6 @@ def extendBoard(board):
     circles = (len(board) // 2)
     firstLine = (circles * ['/']) + ['A','O','A'] + (circles * ['\\'])
     lastLine = (circles * ['\\']) + ['B','O','B'] + (circles * ['/'])
-    i = 1
     for line in board:
         line.insert(0,line[0])
         line.append(line[len(line)-1])
@@ -73,7 +72,7 @@ def choose_piece(player, board):
         return piece
     else:
         print("That is not a piece of yours! Try again.\n")
-        choose_piece()
+        choose_piece(player, board)
 
 def choose_move(piece, board):
     print("Where do you want to move it?\n")
