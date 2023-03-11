@@ -90,9 +90,14 @@ def choose_move(player, piece, board):
         
 def make_move(piece,move,board):
     #Assumindo que o move é válido
-    pieceChar = str(board[piece[1]][piece[0]])
-    board[piece[1]][piece[0]] = "O"
-    board[move[1]][move[0]] = pieceChar
+    xi = piece[0]
+    yi = piece[1]
+    xf = move[0]
+    yf = move[1]
+    pieceChar = board[yi][xi]
+    spotChar = board[yf][xf]
+    board[yi][xi] = spotChar
+    board[yf][xf] = pieceChar
     return board
     
 def isValidMove(piece,move,board):
@@ -110,25 +115,25 @@ def calculateValidMoves(piece,board):
         newMoves = []
         if (moveLeft):
             newX = adjustCoordToSize(x - depth, board)
-            if (board[newX][y] == 'O'):
+            if (board[newX][y] == 'O' and not((newX,y) in moves)):
                 newMoves.append((newX,y))
             else:
                 moveLeft = False
         if (moveRight):
             newX = adjustCoordToSize(x + depth, board)
-            if (board[newX][y] == 'O'):
+            if (board[newX][y] == 'O' and not((newX,y) in moves)):
                 newMoves.append((newX,y))
             else:
                 moveRight = False
         if (moveUp):
             newY = adjustCoordToSize(y - depth, board)
-            if (board[x][newY] == 'O'):
+            if (board[x][newY] == 'O' and not((x,newY) in moves)):
                 newMoves.append((x,newY))
             else:
                 moveUp = False
         if (moveDown):
             newY = adjustCoordToSize(y + depth, board)
-            if (board[x][newY] == 'O'):
+            if (board[x][newY] == 'O' and not((x,newY) in moves)):
                 newMoves.append((x,newY))
             else:
                 moveDown = False
@@ -153,9 +158,9 @@ def adjustCoordToSize(coord, board):
 
 def isPlayerPiece(player,board,piece):
     if (int(player) == 1):
-        return (board[piece[0]][piece[1]] == 'A')
+        return (board[piece[1]][piece[0]] == 'A')
     elif (player == 2):
-        return (board[piece[0]][piece[1]] == 'B')
+        return (board[piece[1]][piece[0]] == 'B')
 
 def hasLost(player,board):
     if (player == 1):
