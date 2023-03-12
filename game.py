@@ -86,7 +86,7 @@ def choose_move(player, piece, board):
         return move
     else:
         print("That is not a valid move! Try again.\n")
-        choose_piece(player, board, piece)
+        choose_piece(player, board)
         
 def make_move(piece,move,board):
     #Assumindo que o move é válido
@@ -140,8 +140,102 @@ def calculateValidMoves(piece,board):
         depth += 1
         increment = len(newMoves)
         moves += newMoves
+    moves += calculateCircleMoves(piece,board)
+    removeDuplicates(moves)
     return moves
-                
+
+def calculateCircleMoves(piece,board):
+    side = len(board)
+    moves = []
+    clockwise = []
+    if identifySector(piece, board) == 1:
+        upperLine = leftCol = piece[1]
+        lowerLine = rightCol = side - 1 - upperLine
+        clockwise = extractCol(board, rightCol) + extractLin(board, lowerLine).reverse() + extractCol(board, leftCol).reverse()
+    elif identifySector(piece, board) == 2:
+        leftCol = upperLine = piece[0]
+        rightCol = lowerLine = side - 1 - leftCol
+        clockwise = extractLin(board, upperLine) + extractCol(board, rightCol) + extractLin(board, lowerLine).reverse()
+    elif identifySector(piece, board) == 4:
+        rightCol = lowerLine = piece[0]
+        leftCol = uperLine = side - 1 - rightCol
+        clockwise = extractLin(board, lowerLine).reverse() + extractCol(board, leftCol).reverse() + extractLin(board, upperLine)
+    elif identifySector(piece, board) == 5:
+        lowerLine = rightCol = piece[1]
+        upperLine = leftCol = side - 1 - lowerLine
+        clockwise = extractCol(board, leftCol).reverse() + extractLin(board, upperLine) + extractCol(board, rightCol)
+    else:
+        return moves
+    reverse = clockwise.reverse()
+    return discardBlockedMoves(clockwise) + discardBlockedMoves(reverse)
+
+def removeDuplicates(lst):
+    newList = []
+    for item in lst:
+        if ~(item in newList):
+            newList.append(item)
+    return newList
+
+def discardBlockedMoves(moves):
+    validMoves = []
+    for move in moves:
+        if move[2] == 'O':
+            validMoves.append((move[0],move[1]))
+        else:
+            break
+    return validMoves
+
+def extractLin(board,lin):
+    line = board[lin]
+    lineList = []
+    x = 0
+    y = lin
+    for spot in line:
+        if(spot != '\\' and spot != '/'):
+            lineList.append((x,y,spot))
+        x += 1
+    return lineList
+
+def extractCol(board,col):
+    x = y = 0
+    column = []
+    for line in board:
+        for spot in line:
+            if(x == col and spot != '/' and spot != '\\'):
+                column.append((x,y,spot))
+            x += 1
+        y += 1
+        x = 0
+    return column
+
+def identifySector(piece,board):
+    side = len(board)
+    middle = middleOfSide(side)
+    isLeftX = piece[0] < middle - 2
+    isMiddleX = piece[0] >= middle - 2 and piece[0] <= middle
+    isRightX = piece[0] > middle
+    isUpperY = piece[1] < middle - 2
+    isMiddleY = piece[1] >= middle - 2 and piece[1] <= middle
+    isLowerY = piece[1] > middle
+    if(isMiddleX):
+        if(isUpperY): return 1
+        elif(isLowerY): return 5
+        elif (isMiddleY): return 3
+    elif(isLeftX):
+        if(isMiddleY): return 2
+        else: return 0
+    elif(isRightX):
+        if(isMiddleY): return 4
+        else: return 0
+    else: return 0
+        
+def middleOfSide(side):
+    decimal = side / 2
+    integer = side // 2
+    if (decimal - integer >= 0.5):
+        return integer + 1
+    else:
+        return integer
         
 def adjustCoordToSize(coord, board):
     size = len(board)
