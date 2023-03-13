@@ -148,25 +148,45 @@ def calculateCircleMoves(piece,board):
     side = len(board)
     moves = []
     clockwise = []
+    reverse = []
     if identifySector(piece, board) == 1:
         upperLine = leftCol = piece[1]
         lowerLine = rightCol = side - 1 - upperLine
-        clockwise = extractCol(board, rightCol) + extractLin(board, lowerLine).reverse() + extractCol(board, leftCol).reverse()
+        clockwise += extractCol(board, rightCol)
+        a = extractLin(board, lowerLine)
+        a.reverse()
+        clockwise += a
+        b = extractCol(board, leftCol)
+        b.reverse()
+        clockwise += b
+        reverse = clockwise
+        reverse.reverse()
     elif identifySector(piece, board) == 2:
         leftCol = upperLine = piece[0]
         rightCol = lowerLine = side - 1 - leftCol
-        clockwise = extractLin(board, upperLine) + extractCol(board, rightCol) + extractLin(board, lowerLine).reverse()
+        clockwise += extractLin(board, upperLine)
+        clockwise += extractCol(board, rightCol)
+        a = extractLin(board, lowerLine)
+        a.reverse()
+        clockwise += a
     elif identifySector(piece, board) == 4:
         rightCol = lowerLine = piece[0]
-        leftCol = uperLine = side - 1 - rightCol
-        clockwise = extractLin(board, lowerLine).reverse() + extractCol(board, leftCol).reverse() + extractLin(board, upperLine)
+        leftCol = upperLine = side - 1 - rightCol
+        a = extractLin(board, lowerLine)
+        a.reverse()
+        b = extractCol(board, leftCol)
+        b.reverse()
+        clockwise = a + b + extractLin(board, upperLine)
     elif identifySector(piece, board) == 5:
         lowerLine = rightCol = piece[1]
         upperLine = leftCol = side - 1 - lowerLine
-        clockwise = extractCol(board, leftCol).reverse() + extractLin(board, upperLine) + extractCol(board, rightCol)
+        a = extractCol(board, leftCol)
+        a.reverse()
+        clockwise = a + extractLin(board, upperLine) + extractCol(board, rightCol)
     else:
         return moves
-    reverse = clockwise.reverse()
+    reverse = clockwise
+    reverse.reverse()
     return discardBlockedMoves(clockwise) + discardBlockedMoves(reverse)
 
 def removeDuplicates(lst):
@@ -194,7 +214,7 @@ def extractLin(board,lin):
         if(spot != '\\' and spot != '/'):
             lineList.append((x,y,spot))
         x += 1
-    return lineList
+    return list(lineList)
 
 def extractCol(board,col):
     x = y = 0
@@ -206,7 +226,7 @@ def extractCol(board,col):
             x += 1
         y += 1
         x = 0
-    return column
+    return list(column)
 
 def identifySector(piece,board):
     side = len(board)
