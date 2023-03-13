@@ -37,6 +37,21 @@ def displayBoard(board):
         i += 1
     return
 
+def markSpots(board,spots):
+    x = y = 0
+    markedBoard = []
+    for line in board:
+        newLine = []
+        for spot in line:
+            if (x,y) in spots:
+                spot = 'X'
+            newLine.append(spot)
+            x += 1
+        markedBoard.append(newLine)
+        x = 0
+        y += 1
+    return markedBoard
+
 def start_pvp(boardSize):
     board = createBoard(boardSize)
     play_pvp(board)
@@ -76,6 +91,8 @@ def choose_piece(player, board):
         choose_piece(player, board)
 
 def choose_move(player, piece, board):
+    markedBoard = markSpots(board, calculateValidMoves(piece, board))
+    displayBoard(markedBoard)
     print("Where do you want to move it?\n")
     x = int(input("X:"))
     print("\n")
@@ -115,25 +132,25 @@ def calculateValidMoves(piece,board):
         newMoves = []
         if (moveLeft):
             newX = adjustCoordToSize(x - depth, board)
-            if (board[newX][y] == 'O' and not((newX,y) in moves)):
+            if (board[y][newX] == 'O' and not((newX,y) in moves)):
                 newMoves.append((newX,y))
             else:
                 moveLeft = False
         if (moveRight):
             newX = adjustCoordToSize(x + depth, board)
-            if (board[newX][y] == 'O' and not((newX,y) in moves)):
+            if (board[y][newX] == 'O' and not((newX,y) in moves)):
                 newMoves.append((newX,y))
             else:
                 moveRight = False
         if (moveUp):
             newY = adjustCoordToSize(y - depth, board)
-            if (board[x][newY] == 'O' and not((x,newY) in moves)):
+            if (board[newY][x] == 'O' and not((x,newY) in moves)):
                 newMoves.append((x,newY))
             else:
                 moveUp = False
         if (moveDown):
             newY = adjustCoordToSize(y + depth, board)
-            if (board[x][newY] == 'O' and not((x,newY) in moves)):
+            if (board[newY][x] == 'O' and not((x,newY) in moves)):
                 newMoves.append((x,newY))
             else:
                 moveDown = False
@@ -159,16 +176,12 @@ def calculateCircleMoves(piece,board):
         b = extractCol(board, leftCol)
         b.reverse()
         clockwise += b
-        reverse = clockwise
-        reverse.reverse()
     elif identifySector(piece, board) == 2:
         leftCol = upperLine = piece[0]
         rightCol = lowerLine = side - 1 - leftCol
-        clockwise += extractLin(board, upperLine)
-        clockwise += extractCol(board, rightCol)
         a = extractLin(board, lowerLine)
         a.reverse()
-        clockwise += a
+        clockwise = extractLin(board, upperLine) + extractCol(board, rightCol) + a
     elif identifySector(piece, board) == 4:
         rightCol = lowerLine = piece[0]
         leftCol = upperLine = side - 1 - rightCol
@@ -185,7 +198,7 @@ def calculateCircleMoves(piece,board):
         clockwise = a + extractLin(board, upperLine) + extractCol(board, rightCol)
     else:
         return moves
-    reverse = clockwise
+    reverse += clockwise
     reverse.reverse()
     return discardBlockedMoves(clockwise) + discardBlockedMoves(reverse)
 
