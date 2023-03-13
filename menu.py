@@ -42,6 +42,7 @@ def choose_mode(boardSize):
     option = input()
     if(option == "A"):
         game.start_pvp(boardSize)
+        main_menu()
     elif(option == "B"):
         choose_difficulty(boardSize)
     else:
@@ -55,10 +56,13 @@ def choose_difficulty(boardSize):
     option = input()
     if(option == "A"):
         game.start_pve(boardSize,1)
+        main_menu()
     elif(option == "B"):
         game.start_pve(boardSize,2)
+        main_menu()
     elif(option == "C"):
         game.start_pve(boardSize,3)
+        main_menu()
     else:
         print("Invalid Input. Try Again.\n")
         choose_difficulty(boardSize)
