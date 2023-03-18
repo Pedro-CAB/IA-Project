@@ -101,7 +101,7 @@ def hasLost(player,board):
     return False
 
 def victory(player):
-    print("Player " + str(player) + "wins!\n")
+    print("Player " + str(player) + " wins!\n")
     print("Returning to menu")
 
 def start_pve(boardSize,difficulty):
