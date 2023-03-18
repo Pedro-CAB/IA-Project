@@ -29,8 +29,12 @@ def displayBoard(board):
     return
             
 def turn(player,board):
-    piece = choose_piece(player,board)
-    move = choose_move(player, piece,board)
+    piece = (-1,-1)
+    while (piece == (-1,-1)):
+        piece = choose_piece(player,board)
+    move = (-1,-1)
+    while (move == (-1, -1)):
+        move = choose_move(player, piece,board)
     board = make_move(piece, move, board)
     return board
 
@@ -45,7 +49,7 @@ def choose_piece(player, board):
         return piece
     else:
         print("That is not a piece of yours! Try again.\n")
-        choose_piece(player, board)
+        return (-1,-1)
 
 def choose_move(player, piece, board):
     markedBoard = gameboard.markSpots(board, calculateValidMoves(piece, board))
@@ -60,7 +64,7 @@ def choose_move(player, piece, board):
         return move
     else:
         print("That is not a valid move! Try again.\n")
-        choose_piece(player, board)
+        return (-1,-1)
         
 def make_move(piece,move,board):
     #Assumindo que o move é válido
