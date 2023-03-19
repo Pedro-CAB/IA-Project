@@ -31,14 +31,15 @@ def getBlockedDirections(piece, board):
     else:
         surrounding_positions.append((xi, 0))
 
-    valid_moves = gameboard.calculateValidMoves(piece, board);
+    valid_moves = gameboard.calculateValidMoves(piece, board); # TODO
     filtered_moves = list(filter(lambda x : x not in surrounding_positions, valid_moves))
 
 
     for i in range(0, len(surrounding_positions)):
         (xf, yf) = surrounding_positions[i];
-        if(board[yf][xf] == 'A' or board[yf][xf] == 'B'):
-            print("\nvalid moves: "+str(valid_moves))
+        if(board[yi][xi] == 'A' or board[yi][xi] == 'B'):
+
+            print("\npiece: "+str(piece)+" valid moves: "+str(valid_moves))
             print("\nsurrounding_positions: "+str(surrounding_positions))
             print("\nfiltered_moves: "+str(filtered_moves))
             print("\nblocked directions: "+str(count));
@@ -54,37 +55,33 @@ def getBlockedDirections(piece, board):
     return count;
 
 def getBoardValue(piece, board):
-    player = board[piece[0]][piece[1]];
-
-    opponent = ''
-    if(player == 'A'):
-        opponent = 'B'
-    else: 
-        opponent = 'A'
+    player = board[piece[1]][piece[0]];
 
     # score_factor: 5, 10, 15, 20, 25
     # piece_value: 0*5, 1*10, 2*15, 3*20, 4*25 
 
-    # opponent_board_value == valor das peças do oponente bloqueadas
-    opponent_board_value = 0;
-    # my_board_value == valor das minhas peças minhas bloqueadas
-    my_board_value = 0;
+    a_board_value = 0;
+    b_board_value = 0;
 
     for row in range(0, len(board)):
         for col in range(0, len(board[row])):
-            if(board[col][row] == opponent):
+            if(board[col][row] == 'A'):
                 blocked_directions = getBlockedDirections((col,row), board);
                 score_factor = (blocked_directions+1)*5;
                 piece_value = blocked_directions*score_factor;
-                opponent_board_value += piece_value;
+                a_board_value += piece_value;
             
-            elif(board[col][row] == player):
+            elif(board[col][row] == 'B'):
                 blocked_directions = getBlockedDirections((col,row), board);
                 score_factor = (blocked_directions+1)*5;
                 piece_value = blocked_directions*score_factor;
-                my_board_value += piece_value;
+                b_board_value += piece_value;
 
-    return (opponent_board_value, my_board_value);
+    if(player == 'A'):
+        # opponent_board_value vem em primeiro lugar sempre
+        return (b_board_value, a_board_value);
+    else:
+        return (a_board_value, b_board_value)
 
 
 # maximize_opponent_blocked_pieces == true --> se eu quiser maximizar valor das peças do oponente bloqueadas
@@ -98,7 +95,7 @@ def evaluate(piece, move, board, maximize_opponent_blocked_pieces, minimize_my_b
     opponent_old_board_value, my_old_board_value = getBoardValue(piece, board);
 
     copy_board = board.copy()
-    gameboard.make_move(piece, move, board); # nao funciona direito
+    gameboard.make_move(piece, move, board); # TODO
     
     opponent_new_board_value, my_new_board_value = getBoardValue(piece, copy_board);
 
