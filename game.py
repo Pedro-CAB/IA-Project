@@ -70,12 +70,16 @@ def choose_move(player, piece, board):
         
 def make_move(piece,move,board):
     #Assumindo que o move é válido
+
+    #copiar as variaveis, nao va o diabo tece-las
     board_copy = copy.deepcopy(board) 
+    piece_copy = copy.deepcopy(piece)
+    move_copy = copy.deepcopy(move)
 
-    print("\n\n ---------- EVALUATION FUNCTION ----------\n")
-    (val1, val2) = evaluate.evaluate(piece, move, board_copy, True, True)
+    print("\n---------- EVALUATION FUNCTION ----------\n")
+    val1 = evaluate.evaluate(piece_copy, move_copy, board_copy)
 
-    print("\n(val1, val2) = "+str(val1)+", "+str(val2)+"\n\n\n\n")
+    print("\nevaluation function = "+str(val1)+" \n\n")
     
     board = gameboard.make_move(piece, move, board)
     

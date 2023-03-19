@@ -1,8 +1,7 @@
 import gameboard
 import copy
 
-# value do board medido em funçao do numero de peças bloqueadas.
-
+# testada e a funcionar como pretendido
 def getBlockedDirections(piece, board):
     
     count = 4;
@@ -31,8 +30,12 @@ def getBlockedDirections(piece, board):
     else:
         surrounding_positions.append((xi, 0))
 
-    valid_moves = gameboard.calculateValidMoves(piece, board); # TODO
-    filtered_moves = list(filter(lambda x : x not in surrounding_positions, valid_moves))
+
+    for i in range(0, len(surrounding_positions)):
+        (x,y) = surrounding_positions[i];
+        if(board[y][x] == '/' or board[y][x] == '\\'):
+            surrounding_positions[i] = (yi,xi)
+    
 
     for i in range(0, len(surrounding_positions)):
         (xf, yf) = surrounding_positions[i];
@@ -40,22 +43,17 @@ def getBlockedDirections(piece, board):
         if(board[yf][xf] == 'O'):
             count-=1;
     
-    
-    if(len(filtered_moves) == 0 and count > 0): count-=1; #TODO
-
-    print("\npiece: "+str(piece)+" valid moves: "+str(valid_moves))
-    print("\nsurrounding_positions: "+str(surrounding_positions))
-    print("\nfiltered_moves: "+str(filtered_moves))
-    print("\nblocked directions: "+str(count));
-    
 
     return count;
+
+
+# testada e a funcionar como pretendido
 
 def getBoardValue(piece, board):
     player = board[piece[1]][piece[0]];
 
     # score_factor: 5, 10, 15, 20, 25
-    # piece_value: 0*5, 1*10, 2*15, 3*20, 4*25 
+    # piece_value: 0*5, 1*10, 2*15, 3*20, 4*25
 
     a_board_value = 0;
     b_board_value = 0;
@@ -77,39 +75,48 @@ def getBoardValue(piece, board):
     if(player == 'A'):
         # opponent_board_value vem em primeiro lugar sempre
         return (b_board_value, a_board_value);
-    else:
+    
+    elif(player == 'B'):
         return (a_board_value, b_board_value)
+    
 
 
-# maximize_opponent_blocked_pieces == true --> se eu quiser maximizar valor das peças do oponente bloqueadas
-# minimize_my_blocked_pieces == true --> se eu quiser minimizar valor das minhas peças minhas bloqueadas
-# maximize_opponent_blocked_pieces == true && minimize_my_blocked_pieces == true --> se eu quiser as duas heuristicas, retorna um tuple (adversario, minhas)
 
-# assumindo que board ainda tem a peça em old_pos.
-def evaluate(piece, move, board, maximize_opponent_blocked_pieces, minimize_my_blocked_pieces):
-    # old_pos = piece e new_pos = move
+
+# testada e a funcionar como pretendido
+# old_pos = piece e new_pos = move
+
+def evaluate(piece, move, board): #, maximize_opponent_blocked_pieces, minimize_my_blocked_pieces):
 
     opponent_old_board_value, my_old_board_value = getBoardValue(piece, board);
 
     board = gameboard.make_move(piece, move, board);
 
-    opponent_new_board_value, my_new_board_value = getBoardValue(piece, board);
+    opponent_new_board_value, my_new_board_value = getBoardValue(move, board);
 
 
-    print("opponent_old_board_value: "+ str(opponent_old_board_value)+ "\nmy_old_board_value: "+str(my_old_board_value)+"\nopponent_new_board_value: "+str(opponent_new_board_value)+"\nmy_new_board_value: "+str(my_new_board_value))
+    print("\nopponent_old_board_value: "+ str(opponent_old_board_value)+ "\nmy_old_board_value: "+str(my_old_board_value)+"\nopponent_new_board_value: "+str(opponent_new_board_value)+"\nmy_new_board_value: "+str(my_new_board_value))
     
+    return opponent_new_board_value - opponent_old_board_value;
+
+    # maximize_opponent_blocked_pieces == true --> se eu quiser maximizar valor das peças do oponente bloqueadas
+    # minimize_my_blocked_pieces == true --> se eu quiser minimizar valor das minhas peças minhas bloqueadas
+    # maximize_opponent_blocked_pieces == true && minimize_my_blocked_pieces == true --> se eu quiser as duas heuristicas, retorna um tuple (adversario, minhas)
+
+    # assumindo que board ainda tem a peça em old_pos.
     
     # retornar a diferença entre os dois tabuleiros (new - old).
     # assumindo que o objetivo é minimizar o nosso board_value e maximizar o board_value do oponente (board_value definido pelo valor das peças bloqueadas)
 
-    if(maximize_opponent_blocked_pieces and not minimize_my_blocked_pieces): #se eu quiser maximizar as peças do adversario bloqueadas
-        return opponent_new_board_value - opponent_old_board_value;
+    #if(maximize_opponent_blocked_pieces and not minimize_my_blocked_pieces): #se eu quiser maximizar as peças do adversario bloqueadas
+    #    return opponent_new_board_value - opponent_old_board_value;
     
-    elif(minimize_my_blocked_pieces and not maximize_opponent_blocked_pieces): #se eu quiser minimizar as minhas peças bloqueadas
-        return my_new_board_value - my_old_board_value;
+    #elif(minimize_my_blocked_pieces and not maximize_opponent_blocked_pieces): #se eu quiser minimizar as minhas peças bloqueadas
+    #    return my_new_board_value - my_old_board_value;
     
-    else: #se eu quiser as duas heuristicas
-        return (opponent_new_board_value - opponent_old_board_value, my_new_board_value - my_old_board_value)
+    #else: #se eu quiser as duas heuristicas
+    #    return (opponent_new_board_value - opponent_old_board_value, my_new_board_value - my_old_board_value)
+
 
 
 
