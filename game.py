@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import gameboard
 import evaluate
+import copy
 
 def start_pvp(boardSize):
     board = createBoard(boardSize)
@@ -69,12 +70,15 @@ def choose_move(player, piece, board):
         
 def make_move(piece,move,board):
     #Assumindo que o move é válido
+    board_copy = copy.deepcopy(board) 
+
     print("\n\n ---------- EVALUATION FUNCTION ----------\n")
-    (val1, val2) = evaluate.evaluate(piece, move, board, True, True) # avaliar board novo sabendo que esta peca moveu-se 👍 
+    (val1, val2) = evaluate.evaluate(piece, move, board_copy, True, True)
 
     print("\n(val1, val2) = "+str(val1)+", "+str(val2)+"\n\n\n\n")
-
+    
     board = gameboard.make_move(piece, move, board)
+    
     return board
     
 def isValidMove(piece,move,board):

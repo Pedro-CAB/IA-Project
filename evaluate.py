@@ -1,11 +1,11 @@
 import gameboard
-import utils
+import copy
 
 # value do board medido em funçao do numero de peças bloqueadas.
 
 def getBlockedDirections(piece, board):
     
-    count = 0;
+    count = 4;
 
     (xi, yi) = piece;
     
@@ -34,22 +34,19 @@ def getBlockedDirections(piece, board):
     valid_moves = gameboard.calculateValidMoves(piece, board); # TODO
     filtered_moves = list(filter(lambda x : x not in surrounding_positions, valid_moves))
 
-
     for i in range(0, len(surrounding_positions)):
         (xf, yf) = surrounding_positions[i];
-        if(board[yi][xi] == 'A' or board[yi][xi] == 'B'):
 
-            print("\npiece: "+str(piece)+" valid moves: "+str(valid_moves))
-            print("\nsurrounding_positions: "+str(surrounding_positions))
-            print("\nfiltered_moves: "+str(filtered_moves))
-            print("\nblocked directions: "+str(count));
-        
-        if(board[yf][xf] != 'O'):
-            count+=1;
+        if(board[yf][xf] == 'O'):
+            count-=1;
     
     
-    if(len(filtered_moves) == 0 and count < 4): count+=1;
+    if(len(filtered_moves) == 0 and count > 0): count-=1; #TODO
 
+    print("\npiece: "+str(piece)+" valid moves: "+str(valid_moves))
+    print("\nsurrounding_positions: "+str(surrounding_positions))
+    print("\nfiltered_moves: "+str(filtered_moves))
+    print("\nblocked directions: "+str(count));
     
 
     return count;
@@ -65,13 +62,13 @@ def getBoardValue(piece, board):
 
     for row in range(0, len(board)):
         for col in range(0, len(board[row])):
-            if(board[col][row] == 'A'):
+            if(board[row][col] == 'A'):
                 blocked_directions = getBlockedDirections((col,row), board);
                 score_factor = (blocked_directions+1)*5;
                 piece_value = blocked_directions*score_factor;
                 a_board_value += piece_value;
             
-            elif(board[col][row] == 'B'):
+            elif(board[row][col] == 'B'):
                 blocked_directions = getBlockedDirections((col,row), board);
                 score_factor = (blocked_directions+1)*5;
                 piece_value = blocked_directions*score_factor;
@@ -94,10 +91,9 @@ def evaluate(piece, move, board, maximize_opponent_blocked_pieces, minimize_my_b
 
     opponent_old_board_value, my_old_board_value = getBoardValue(piece, board);
 
-    copy_board = board.copy()
-    gameboard.make_move(piece, move, board); # TODO
-    
-    opponent_new_board_value, my_new_board_value = getBoardValue(piece, copy_board);
+    board = gameboard.make_move(piece, move, board);
+
+    opponent_new_board_value, my_new_board_value = getBoardValue(piece, board);
 
 
     print("opponent_old_board_value: "+ str(opponent_old_board_value)+ "\nmy_old_board_value: "+str(my_old_board_value)+"\nopponent_new_board_value: "+str(opponent_new_board_value)+"\nmy_new_board_value: "+str(my_new_board_value))
@@ -125,3 +121,7 @@ def evaluate(piece, move, board, maximize_opponent_blocked_pieces, minimize_my_b
 
 
 # おっぱい ♥ ♡  -- Drop Em Out by Wheeler Walker Jr
+
+# peças bloqueadas em 0 direçoes = 0
+# pecas bloqueadas em 1 direçao = 2
+# pecas bloqueadas em 2 direçoes = 6
