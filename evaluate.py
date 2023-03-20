@@ -40,20 +40,20 @@ def getBlockedDirections(piece, board):
 
         elif(board[y][x] == '\\'):
             width_of_slash_section = int((len(board)-3)/2)
-            if(xi>((len(board)-1)/2) and xi<len(board) and yi>=0 and yi < ((len(board)-1)/2)):
-                if(xi >= (len(board)-width_of_slash_section) and xi < (len(board))):
+            if(xi>((len(board)-1)/2) and xi<len(board) and yi>=0 and yi < ((len(board)-1)/2)): # está no 1 quadrante
+                if(xi >= (len(board)-width_of_slash_section) and xi < (len(board))): # está numa linha do 1 Quadrante
                     distance_to_first_slash = xi - (len(board)-width_of_slash_section-1)
                     surrounding_positions[i] = (xi-distance_to_first_slash, yi-distance_to_first_slash)
-                elif(xi < (len(board)-width_of_slash_section)):
+                elif(xi < (len(board)-width_of_slash_section)): # está numa coluna do 1 Quadrante
                     distance_to_first_slash = width_of_slash_section - yi
                     surrounding_positions[i] = (xi+distance_to_first_slash, yi+distance_to_first_slash)
 
             
-            elif(yi>((len(board)-1)/2) and yi<len(board) and xi>=0 and xi < ((len(board)-1)/2)):
-                if(xi>=0 and xi < width_of_slash_section):
+            elif(yi>((len(board)-1)/2) and yi<len(board) and xi>=0 and xi < ((len(board)-1)/2)): # está no 3 quadrante
+                if(xi>=0 and xi < width_of_slash_section):  # está numa linha do 3 Quadrante
                     distance_to_first_slash = width_of_slash_section - xi
                     surrounding_positions[i] = (xi+distance_to_first_slash, yi+distance_to_first_slash)
-                elif(xi>=width_of_slash_section):
+                elif(xi>=width_of_slash_section): # está numa coluna do 3 Quadrante
                     distance_to_first_slash = yi-(len(board)-width_of_slash_section-1)
                     surrounding_positions[i] = (xi-distance_to_first_slash, yi-distance_to_first_slash)
 
