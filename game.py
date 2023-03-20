@@ -77,9 +77,9 @@ def make_move(piece,move,board):
     move_copy = copy.deepcopy(move)
 
     print("\n---------- EVALUATION FUNCTION ----------\n")
-    val1 = evaluate.evaluate(piece_copy, move_copy, board_copy)
+    (val1, val2) = evaluate.evaluate(piece_copy, move_copy, board_copy)
 
-    print("\nevaluation function = "+str(val1)+" \n\n")
+    print("\nresults  ----  opponent_value = "+str(val1)+"  my_value: "+str(val2)+"\n\n")
     
     board = gameboard.make_move(piece, move, board)
     

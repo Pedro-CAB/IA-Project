@@ -30,12 +30,34 @@ def getBlockedDirections(piece, board):
     else:
         surrounding_positions.append((xi, 0))
 
+    #print("\npiece: "+str(piece))
+    #print("\nsurrounding_positions before alteration: "+str(surrounding_positions))
 
     for i in range(0, len(surrounding_positions)):
         (x,y) = surrounding_positions[i];
-        if(board[y][x] == '/' or board[y][x] == '\\'):
+        if(board[y][x] == '/'):
             surrounding_positions[i] = (yi,xi)
-    
+
+        elif(board[y][x] == '\\'):
+            width_of_slash_section = int((len(board)-3)/2)
+            if(xi>((len(board)-1)/2) and xi<len(board) and yi>=0 and yi < ((len(board)-1)/2)):
+                if(xi >= (len(board)-width_of_slash_section) and xi < (len(board))):
+                    distance_to_first_slash = xi - (len(board)-width_of_slash_section-1)
+                    surrounding_positions[i] = (xi-distance_to_first_slash, yi-distance_to_first_slash)
+                elif(xi < (len(board)-width_of_slash_section)):
+                    distance_to_first_slash = width_of_slash_section - yi
+                    surrounding_positions[i] = (xi+distance_to_first_slash, yi+distance_to_first_slash)
+
+            
+            elif(yi>((len(board)-1)/2) and yi<len(board) and xi>=0 and xi < ((len(board)-1)/2)):
+                if(xi>=0 and xi < width_of_slash_section):
+                    distance_to_first_slash = width_of_slash_section - xi
+                    surrounding_positions[i] = (xi+distance_to_first_slash, yi+distance_to_first_slash)
+                elif(xi>=width_of_slash_section):
+                    distance_to_first_slash = yi-(len(board)-width_of_slash_section-1)
+                    surrounding_positions[i] = (xi-distance_to_first_slash, yi-distance_to_first_slash)
+
+
 
     for i in range(0, len(surrounding_positions)):
         (xf, yf) = surrounding_positions[i];
@@ -43,7 +65,8 @@ def getBlockedDirections(piece, board):
         if(board[yf][xf] == 'O'):
             count-=1;
     
-
+    #print("\nsurrounding_positions after alteration: "+str(surrounding_positions))
+    # print("\nblocked directions: "+str(count));
     return count;
 
 
@@ -86,41 +109,25 @@ def getBoardValue(piece, board):
 # testada e a funcionar como pretendido
 # old_pos = piece e new_pos = move
 
-def evaluate(piece, move, board): #, maximize_opponent_blocked_pieces, minimize_my_blocked_pieces):
+def evaluate(piece, move, board):
 
+    # for row in range(0, len(board)):
+    #         for col in range(0, len(board[row])):
+    #             if(board[row][col] == 'A' or board[row][col] == 'B'):
+    #                 getBlockedDirections((col,row), board)
+    
     opponent_old_board_value, my_old_board_value = getBoardValue(piece, board);
 
     board = gameboard.make_move(piece, move, board);
 
+    # print("\n\n-----------------\nA MOVE WAS MADE\n-----------------\n\n")
+
     opponent_new_board_value, my_new_board_value = getBoardValue(move, board);
 
 
-    print("\nopponent_old_board_value: "+ str(opponent_old_board_value)+ "\nmy_old_board_value: "+str(my_old_board_value)+"\nopponent_new_board_value: "+str(opponent_new_board_value)+"\nmy_new_board_value: "+str(my_new_board_value))
+    # print("\nopponent_old_board_value: "+ str(opponent_old_board_value)+ "\nmy_old_board_value: "+str(my_old_board_value)+"\nopponent_new_board_value: "+str(opponent_new_board_value)+"\nmy_new_board_value: "+str(my_new_board_value))
     
-    return opponent_new_board_value - opponent_old_board_value;
-
-    # maximize_opponent_blocked_pieces == true --> se eu quiser maximizar valor das peças do oponente bloqueadas
-    # minimize_my_blocked_pieces == true --> se eu quiser minimizar valor das minhas peças minhas bloqueadas
-    # maximize_opponent_blocked_pieces == true && minimize_my_blocked_pieces == true --> se eu quiser as duas heuristicas, retorna um tuple (adversario, minhas)
-
-    # assumindo que board ainda tem a peça em old_pos.
-    
-    # retornar a diferença entre os dois tabuleiros (new - old).
-    # assumindo que o objetivo é minimizar o nosso board_value e maximizar o board_value do oponente (board_value definido pelo valor das peças bloqueadas)
-
-    #if(maximize_opponent_blocked_pieces and not minimize_my_blocked_pieces): #se eu quiser maximizar as peças do adversario bloqueadas
-    #    return opponent_new_board_value - opponent_old_board_value;
-    
-    #elif(minimize_my_blocked_pieces and not maximize_opponent_blocked_pieces): #se eu quiser minimizar as minhas peças bloqueadas
-    #    return my_new_board_value - my_old_board_value;
-    
-    #else: #se eu quiser as duas heuristicas
-    #    return (opponent_new_board_value - opponent_old_board_value, my_new_board_value - my_old_board_value)
-
-
-
-
-
+    return (opponent_new_board_value - opponent_old_board_value , my_new_board_value - my_old_board_value);
 
 
 
@@ -128,7 +135,3 @@ def evaluate(piece, move, board): #, maximize_opponent_blocked_pieces, minimize_
 
 
 # おっぱい ♥ ♡  -- Drop Em Out by Wheeler Walker Jr
-
-# peças bloqueadas em 0 direçoes = 0
-# pecas bloqueadas em 1 direçao = 2
-# pecas bloqueadas em 2 direçoes = 6
