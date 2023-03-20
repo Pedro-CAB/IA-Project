@@ -14,28 +14,20 @@ def boardGen(piece, board):
     
     new_boards = []
     
-    old_board = board
-    
     possible_moves = gameboard.calculateValidMoves(piece,board)
     
     print("Old Board:")
-    gameboard.display(old_board)
-    
+    gameboard.display(board)
     
     
     for p_move in possible_moves:
         print(p_move)
         print("New board:")
-        game.make_move(piece, p_move, board)
         
-        #gameboard.display(new_board)
-        gameboard.display(board)
-        gameboard.display(old_board)
+        new_board = game.make_move(piece, p_move, board)
+
+        new_boards.append(new_board)
         
-        #new_boards.append(new_board)
-        
-    print("After Loop:")
-    gameboard.display(old_board)
     return new_boards
     
 
@@ -49,13 +41,10 @@ piece = (3,1)
 boards = boardGen(piece, board)
 
 
-print("Initial Board:")
-gameboard.display(board)
+
+print("Possible moves:")
 
 
-# print("Possible moves:")
-
-
-# for b in boards:
-#     gameboard.display(b)
+for b in boards:
+    gameboard.display(b)
 

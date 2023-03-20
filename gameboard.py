@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import utils
+import copy
 
 def create(piecesPerPlayer):
     #Assume-se que o piecesPerPlayer já foi verificado e é par e >= 4
@@ -56,15 +57,16 @@ def markSpots(board,spots):
 
 def make_move(piece,move,board):
     #Assumindo que o move é válido
+    new_board = copy.deepcopy(board)
     xi = piece[0]
     yi = piece[1]
     xf = move[0]
     yf = move[1]
-    pieceChar = board[yi][xi]
-    spotChar = board[yf][xf]
-    board[yi][xi] = spotChar
-    board[yf][xf] = pieceChar
-    return board
+    pieceChar = new_board[yi][xi]
+    spotChar = new_board[yf][xf]
+    new_board[yi][xi] = spotChar
+    new_board[yf][xf] = pieceChar
+    return new_board
 
 def calculateValidMoves(piece,board):
     moves = []
