@@ -39,6 +39,10 @@ def display(board):
         i += 1
     return
 
+def displayMarked(piece,board):
+    display(markSpots(board, calculateValidMoves(piece, board)))
+    return
+
 def markSpots(board,spots):
     x = y = 0
     markedBoard = []
@@ -120,11 +124,12 @@ def calculateCircleMoves(piece,board):
     if identifySector(piece, board) == 1:
         if (x == middle):
             clockwise += (x+1,y,board[y][x+1])
-            reverse += (x-1,y,board[y][x-1])
+            final = [(x-1,y,board[y][x-1])]
         elif (x == middle - 1):
             clockwise += [(x+1,y,board[y][x+1]),(x+2,y,board[y][x+2])]
+            final = []
         elif (x == middle + 1):
-            reverse += [(x-1,y,board[y][x-1]),(x-2,y,board[y][x-2])]
+            final = [(x-2,y,board[y][x-2]),(x-1,y,board[y][x-1])]
         upperLine = leftCol = y
         lowerLine = rightCol = side - 1 - upperLine
         clockwise += utils.extractCol(board, rightCol)
@@ -137,46 +142,50 @@ def calculateCircleMoves(piece,board):
     elif identifySector(piece, board) == 2:
         if (y == middle):
             clockwise += (x,y+1,board[y+1][x])
-            reverse += (x,y-1,board[y-1][x])
+            final = [(x,y-1,board[y-1][x])]
         elif (y == middle - 1):
-            reverse += [(x,y+1,board[y+1][x]),(x,y+2,board[y+2][x])]
+            final = [(x,y+2,board[y+2][x]),(x,y+1,board[y+1][x])]
         elif (y == middle + 1):
             clockwise += [(x,y-1,board[y-1][x]),(x,y-2,board[y-2][x])]
+            final = []
         leftCol = upperLine = piece[0]
         rightCol = lowerLine = side - 1 - leftCol
         a = utils.extractLin(board, lowerLine)
         a.reverse()
-        clockwise = utils.extractLin(board, upperLine) + utils.extractCol(board, rightCol) + a
+        clockwise += utils.extractLin(board, upperLine) + utils.extractCol(board, rightCol) + a
     elif identifySector(piece, board) == 4:
         if (y == middle):
-            reverse += (x,y+1,board[y+1][x])
+            final = (x,y+1,board[y+1][x])
             clockwise += (x,y-1,board[y-1][x])
         elif (y == middle - 1):
             clockwise += [(x,y+1,board[y+1][x]),(x,y+2,board[y+2][x])]
+            final = []
         elif (y == middle + 1):
-            reverse += [(x,y-1,board[y-1][x]),(x,y-2,board[y-2][x])]
+            final = [(x,y-2,board[y-2][x]),(x,y-1,board[y-1][x])]
         rightCol = lowerLine = piece[0]
         leftCol = upperLine = side - 1 - rightCol
         a = utils.extractLin(board, lowerLine)
         a.reverse()
         b = utils.extractCol(board, leftCol)
         b.reverse()
-        clockwise = a + b + utils.extractLin(board, upperLine)
+        clockwise += a + b + utils.extractLin(board, upperLine)
     elif identifySector(piece, board) == 5:
         if (x == middle):
-            reverse += (x+1,y,board[y][x+1])
+            final = (x+1,y,board[y][x+1])
             clockwise += (x-1,y,board[y][x-1])
         elif (x == middle - 1):
-            reverse += [(x+1,y,board[y][x+1]),(x+2,y,board[y][x+2])]
+            final = [(x+2,y,board[y][x+2]),(x+1,y,board[y][x+1])]
         elif (x == middle + 1):
             clockwise += [(x-1,y,board[y][x-1]),(x-2,y,board[y][x-2])]
+            final = []
         lowerLine = rightCol = piece[1]
         upperLine = leftCol = side - 1 - lowerLine
         a = utils.extractCol(board, leftCol)
         a.reverse()
-        clockwise = a + utils.extractLin(board, upperLine) + utils.extractCol(board, rightCol)
+        clockwise += a + utils.extractLin(board, upperLine) + utils.extractCol(board, rightCol)
     else:
         return moves
+    clockwise += final
     reverse += clockwise
     reverse.reverse()
     return utils.discardBlockedMoves(clockwise) + utils.discardBlockedMoves(reverse)
