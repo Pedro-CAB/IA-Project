@@ -71,9 +71,9 @@ def choose_move(player, piece, board):
 def make_move(piece,move,board):
     #Assumindo que o move é válido
 
-    #copiar as variaveis, nao va o diabo tece-las
     print("\n---------- START EVALUATION FUNCTION ----------\n")
     
+    #copiar as variaveis, nao va o diabo tece-las
     board_copy = copy.deepcopy(board) 
     piece_copy = copy.deepcopy(piece)
     move_copy = copy.deepcopy(move)
