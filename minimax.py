@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import gameboard
+
+
 #To be decided later
 class Piece:
 
@@ -19,18 +22,16 @@ class Piece:
 
 class Node:
     
-    def __init__(self, id, value):
+    def __init__(self, id, board):
         self.id = id
-        self.value = value
+        self.board = board
         self.visited = False
         self.depth = 0
         self.edges = []
         
     def set_depth(self, depth):
         self.depth = depth
-        
-    def set_value(self, value):
-        self.value = value
+
         
     def addEdge(self, dest):
         dest.set_depth(self.depth + 1)
@@ -59,7 +60,7 @@ class Tree:
        self.nodes.add(node)
        
    def addEdge(self, s, d):
-       if s in self.nodes and b in self.nodes:
+       if s in self.nodes and d in self.nodes:
            s.addEdge(d)
            return 0
        else:
@@ -70,24 +71,7 @@ class Tree:
            n.printEdges()
        
         
-t = Tree()
 
-a = Node(1,10)
-
-b = Node(2,40)
-
-c = Node(3,45)
-
-
-t.addNode(a)
-t.addNode(b)
-t.addNode(c)
-
-t.addEdge(a, b)
-t.addEdge(a, c)
-t.addEdge(b, c)
-
-t.printAllEdges()
 
 
 def minimax(node, depth, alpha, beta, maximising, player, maxPlayer, eval_func):

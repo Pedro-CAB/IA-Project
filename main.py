@@ -6,4 +6,3 @@ def start_wana():
 
 if __name__ == "__main__":
     start_wana()
-

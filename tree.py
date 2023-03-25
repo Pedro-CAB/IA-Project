@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Mar 20 11:22:51 2023
-
-@author: pedro
-"""
 
 import gameboard
 import game
+
+import minimax
 
 
 def boardGen(piece, board):
@@ -16,35 +13,39 @@ def boardGen(piece, board):
     
     possible_moves = gameboard.calculateValidMoves(piece,board)
     
-    print("Old Board:")
-    gameboard.display(board)
-    
-    
     for p_move in possible_moves:
-        print(p_move)
-        print("New board:")
         
         new_board = game.make_move(piece, p_move, board)
 
         new_boards.append(new_board)
         
     return new_boards
+
+
+def createGameTree(piece, board):
     
-
-
+    game_tree = minimax.Tree()
+   
+    init = minimax.Node(1, board)
+    
+    game_tree.addNode(init)
+    
+    new_boards = boardGen(piece, board)
+    
+    for b in new_boards:
+        
+        node = minimax.Node(new_boards.index(b)+2, b)
+        
+        game_tree.addNode(node)
+        
+        game_tree.addEdge(init, node)       
+   
+    return game_tree
+       
 board = gameboard.create(4)
-
 
 piece = (3,1)
 
+game_tree = createGameTree(piece, board)
 
-boards = boardGen(piece, board)
-
-
-
-print("Possible moves:")
-
-
-for b in boards:
-    gameboard.display(b)
-
+game_tree.printAllEdges()
