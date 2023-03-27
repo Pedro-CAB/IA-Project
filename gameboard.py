@@ -124,8 +124,9 @@ def calculateCircleMoves(piece,board):
     currentCol = utils.extractCol(board, x)
     middle = middleOfSide(len(board)) - 1
     if identifySector(piece, board) == 1:
+        print("If 1 \n")
         if (x == middle):
-            clockwise += (x+1,y,board[y][x+1])
+            clockwise += [(x+1,y,board[y][x+1])]
             final = [(x-1,y,board[y][x-1])]
         elif (x == middle - 1):
             clockwise += [(x+1,y,board[y][x+1]),(x+2,y,board[y][x+2])]
@@ -142,12 +143,17 @@ def calculateCircleMoves(piece,board):
         b.reverse()
         clockwise += b
     elif identifySector(piece, board) == 2:
+        print("If 2 \n")
         if (y == middle):
-            clockwise += (x,y+1,board[y+1][x])
+            print("If 2.1 \n")
+            print((x,y+1,board[y+1][x]))
+            clockwise += [(x,y+1,board[y+1][x])]
             final = [(x,y-1,board[y-1][x])]
         elif (y == middle - 1):
+            print("If 2.2 \n")
             final = [(x,y+2,board[y+2][x]),(x,y+1,board[y+1][x])]
         elif (y == middle + 1):
+            print("If 2.3 \n")
             clockwise += [(x,y-1,board[y-1][x]),(x,y-2,board[y-2][x])]
             final = []
         leftCol = upperLine = piece[0]
@@ -156,9 +162,10 @@ def calculateCircleMoves(piece,board):
         a.reverse()
         clockwise += utils.extractLin(board, upperLine) + utils.extractCol(board, rightCol) + a
     elif identifySector(piece, board) == 4:
+        print("If 3 \n")
         if (y == middle):
-            final = (x,y+1,board[y+1][x])
-            clockwise += (x,y-1,board[y-1][x])
+            final = [(x,y+1,board[y+1][x])]
+            clockwise += [(x,y-1,board[y-1][x])]
         elif (y == middle - 1):
             clockwise += [(x,y+1,board[y+1][x]),(x,y+2,board[y+2][x])]
             final = []
@@ -172,9 +179,10 @@ def calculateCircleMoves(piece,board):
         b.reverse()
         clockwise += a + b + utils.extractLin(board, upperLine)
     elif identifySector(piece, board) == 5:
+        print("If 4 \n")
         if (x == middle):
-            final = (x+1,y,board[y][x+1])
-            clockwise += (x-1,y,board[y][x-1])
+            final = [(x+1,y,board[y][x+1])]
+            clockwise += [(x-1,y,board[y][x-1])]
         elif (x == middle - 1):
             final = [(x+2,y,board[y][x+2]),(x+1,y,board[y][x+1])]
         elif (x == middle + 1):
@@ -190,6 +198,8 @@ def calculateCircleMoves(piece,board):
     clockwise += final
     reverse += clockwise
     reverse.reverse()
+    print(clockwise)
+    print(reverse)
     return utils.discardBlockedMoves(clockwise) + utils.discardBlockedMoves(reverse)
 
 def identifySector(piece,board):

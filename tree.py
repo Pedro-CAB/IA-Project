@@ -71,7 +71,7 @@ gameboard.display(board)
 
 t = minimax.Tree()
 
-game_tree = createGameTree(board, 1,5, t, None)
+game_tree = createGameTree(board, 1,10, t, None)
 
 game_tree.printAllEdges()
 
