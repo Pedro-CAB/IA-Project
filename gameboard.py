@@ -233,3 +233,24 @@ def middleOfSide(side):
         return integer + 1
     else:
         return integer
+    
+def getAllPieceCoords(board):
+    return getPieceCoords(board,1) + getPieceCoords(board,2)
+    
+def getPieceCoords(board, player):
+    coords = []
+    if player == 1:
+        char = 'A'
+    elif player == 2:
+        char = 'B'
+    else:
+        return []
+    x = y = 0
+    for line in board:
+        for spot in line:
+            if spot == char:
+                coords.append((x,y))
+            x += 1
+        y += 1
+    return coords
+        
