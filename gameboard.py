@@ -251,6 +251,7 @@ def getPieceCoords(board, player):
             if spot == char:
                 coords.append((x,y))
             x += 1
+        x = 0
         y += 1
     return coords
         
