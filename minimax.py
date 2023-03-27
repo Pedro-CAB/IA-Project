@@ -22,15 +22,18 @@ class Piece:
 
 class Node:
     
-    def __init__(self, id, board):
+    def __init__(self, id, board, depth):
         self.id = id
         self.board = board
         self.visited = False
-        self.depth = 0
+        self.depth = depth
         self.edges = []
         
     def set_depth(self, depth):
         self.depth = depth
+        
+    def get_depth(self):
+        return self.depth
 
         
     def addEdge(self, dest):
@@ -43,9 +46,13 @@ class Node:
     def printEdges(self):
         for edge in self.edges:
             print((self.id, edge.id))
+            edge.printBoard()
             
     def isEmpty(self):
         return len(self.edges) == 0
+    
+    def printBoard(self):
+        return gameboard.display(self.board)
         
     
 
@@ -69,8 +76,9 @@ class Tree:
    def printAllEdges(self):
        for n in self.nodes:
            n.printEdges()
-       
-        
+           
+   def addTree(self, s1, s2):
+       self.addEdge(s1, s2)   
 
 
 
@@ -97,7 +105,6 @@ def minimax(node, depth, alpha, beta, maximising, player, maxPlayer, eval_func):
             evaluate = minimax(new_node, depth-1, alpha, beta, True, player, eval_func)
             min_eval = min(beta, evaluate)
             beta = min(beta, evaluate)
-            
             if beta <= alpha:
                 break
             return min_eval
