@@ -6,9 +6,10 @@ import game
 
 class Node:
     
-    def __init__(self, id, board, depth):
+    def __init__(self, id, board, piece, depth):
         self.id = id
         self.board = board
+        self.piece = piece
         self.visited = False
         self.depth = depth
         self.edges = []
@@ -18,7 +19,6 @@ class Node:
         
     def get_depth(self):
         return self.depth
-
         
     def addEdge(self, dest):
         if dest not in self.edges:
@@ -77,16 +77,19 @@ def boardGen(piece, board):
         
     return new_boards
 
-def nextPlayerBoardsGen(board, player):
+def nextPlayerBoardsGen(board, player, m):
     
     boards = []
     
-    pieces = gameboard.getPieceCoords(board, player)    
+    pieces= gameboard.getPieceCoords(board, player)
+
     for piece in pieces:
         
         next_p_boards = boardGen(piece, board)
         
         boards.extend(next_p_boards)
+        
+        m[len(boards)] = piece
     
     return boards
 
@@ -95,18 +98,21 @@ def createGameTree(board, player, depth, tree, init):
     
     if (init is None):
    
-        init = Node(1, board, 1)
+        init = Node(1, board, None, 1)
     
         tree.addNode(init)  
+        
+    maps = {}
     
     while (depth > 0):
+                
+        new_boards = nextPlayerBoardsGen(board, player, maps)
         
-        new_boards = nextPlayerBoardsGen(board, player)
-
         for b in new_boards:
             
-            node = Node(new_boards.index(b)+2, b, init.get_depth() + 1)
+            key = list(filter(lambda x: maps[x] == b, maps))[0]
             
+            node = Node(new_boards.index(b)+2, new_boards[key], init.get_depth() + 1)
             tree.addEdge(init, node)
             
             if player == 1:
@@ -115,7 +121,7 @@ def createGameTree(board, player, depth, tree, init):
             
             else:
                 
-                tree = createGameTree(b, 2, depth - 1, tree, node)
+                tree = createGameTree(b, 1, depth - 1, tree, node)
             
             depth -= 1
    

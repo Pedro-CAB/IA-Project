@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 import gameboard
-import evaluate
-import copy
 
 def start_pvp(boardSize):
     board = createBoard(boardSize)
@@ -70,22 +68,7 @@ def choose_move(player, piece, board):
         
 def make_move(piece,move,board):
     #Assumindo que o move é válido
-
-    print("\n---------- START EVALUATION FUNCTION ----------\n")
-    
-    #copiar as variaveis, nao va o diabo tece-las
-    board_copy = copy.deepcopy(board) 
-    piece_copy = copy.deepcopy(piece)
-    move_copy = copy.deepcopy(move)
-
-    (val1, val2) = evaluate.evaluate(piece_copy, move_copy, board_copy)
-
-    print("\nresults  ----  opponent_value = "+str(val1)+"  my_value: "+str(val2)+"\n\n")
-
-    print("\n---------- END EVALUATION FUNCTION ----------\n")
-    
     board = gameboard.make_move(piece, move, board)
-    
     return board
     
 def isValidMove(piece,move,board):
@@ -123,4 +106,3 @@ def victory(player):
 
 def start_pve(boardSize,difficulty):
     print("<Note: Right now, difficulty modes are not implemented>\n")
-    

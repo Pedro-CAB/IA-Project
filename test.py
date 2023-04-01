@@ -14,14 +14,14 @@ def test_minimax():
     gameboard.display(board)
 
     t = tree.Tree()
-
-    game_tree = tree.createGameTree(board, 1, 5, t, None)
+    
+    game_tree = tree.createGameTree(board, 1, 2, t, None)
     
     game_tree.printAllEdges()
     
+    # res_minimax = minimax.minimax(game_tree.nodes[0], 5, float('-inf'), float('inf'), True, 1, evaluate.evaluate)
     
-    res_minimax = minimax.minimax(game_tree.nodes[0], 5, float('-inf'), float('inf'), True, 1, evaluate.evaluate((3,1), (3,2), board))
-    
-    return res_minimax
+    # return res_minimax
 
 test_minimax()
+
