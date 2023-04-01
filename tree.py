@@ -3,7 +3,6 @@
 
 import gameboard
 import game
-import minimax
 
 class Node:
     
@@ -63,9 +62,6 @@ class Tree:
            
    def addTree(self, s1, s2):
        self.addEdge(s1, s2)   
-
-
-
 
 def boardGen(piece, board):
     

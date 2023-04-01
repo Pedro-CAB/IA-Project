@@ -4,6 +4,7 @@
 import tree
 import minimax
 import gameboard
+import evaluate
 
 
 def test_minimax():
@@ -19,9 +20,8 @@ def test_minimax():
     game_tree.printAllEdges()
     
     
+    res_minimax = minimax.minimax(game_tree.nodes[0], 5, float('-inf'), float('inf'), True, 1, evaluate.evaluate((3,1), (3,2), board))
     
-    res_minimax = minimax.minimax(game_tree.nodes[0], 5, float('-inf'), float('inf'), True, 1, eval_func)
-    
-    return 0
+    return res_minimax
 
 test_minimax()
