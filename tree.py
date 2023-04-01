@@ -5,6 +5,68 @@ import gameboard
 import game
 import minimax
 
+class Node:
+    
+    def __init__(self, id, board, depth):
+        self.id = id
+        self.board = board
+        self.visited = False
+        self.depth = depth
+        self.edges = []
+        
+    def set_depth(self, depth):
+        self.depth = depth
+        
+    def get_depth(self):
+        return self.depth
+
+        
+    def addEdge(self, dest):
+        if dest not in self.edges:
+            dest.set_depth(self.depth + 1)
+            self.edges.append(dest)
+        
+    def allEdges(self):
+        return self.edges
+        
+    def printEdges(self):
+        for edge in self.edges:
+            print((self.id, edge.id))
+            edge.printBoard()
+            
+    def isEmpty(self):
+        return len(self.edges) == 0
+    
+    def printBoard(self):
+        return gameboard.display(self.board)
+
+class Tree:
+    
+   def __init__(self):
+       self.nodes = []
+       
+   def addNode(self, node):
+       if node not in self.nodes:
+           self.nodes.append(node)
+       
+   def addEdge(self, s, d):
+       if s in self.nodes and d not in self.nodes:
+           self.addNode(d)
+           s.addEdge(d)
+           return 0
+       else:
+           return -1
+       
+   def printAllEdges(self):
+       for n in self.nodes:
+           n.printEdges()
+           
+   def addTree(self, s1, s2):
+       self.addEdge(s1, s2)   
+
+
+
+
 def boardGen(piece, board):
     
     new_boards = []
@@ -37,7 +99,7 @@ def createGameTree(board, player, depth, tree, init):
     
     if (init is None):
    
-        init = minimax.Node(1, board, 1)
+        init = Node(1, board, 1)
     
         tree.addNode(init)  
     
@@ -47,9 +109,7 @@ def createGameTree(board, player, depth, tree, init):
 
         for b in new_boards:
             
-            node = minimax.Node(new_boards.index(b)+2, b, init.get_depth() + 1)
-            
-            tree.addNode(node)
+            node = Node(new_boards.index(b)+2, b, init.get_depth() + 1)
             
             tree.addEdge(init, node)
             
@@ -64,15 +124,3 @@ def createGameTree(board, player, depth, tree, init):
             depth -= 1
    
     return tree
-       
-board = gameboard.create(4)
-
-gameboard.display(board)
-
-t = minimax.Tree()
-
-game_tree = createGameTree(board, 1, 10, t, None)
-
-game_tree.printAllEdges()
-
-print(len(game_tree.nodes))
