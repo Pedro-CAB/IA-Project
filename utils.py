@@ -2,7 +2,7 @@
 def removeDuplicates(lst):
     newList = []
     for item in lst:
-        if ~(item in newList):
+        if item not in newList:
             newList.append(item)
     return newList
 
