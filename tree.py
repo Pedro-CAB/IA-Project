@@ -7,8 +7,8 @@ import utils
 
 class Node:
     
-    def __init__(self, board, piece, depth):
-        #self.id = id
+    def __init__(self, id, board, piece, depth):
+        self.id = id
         self.board = board
         self.piece = piece
         self.visited = False
@@ -31,9 +31,9 @@ class Node:
         
     def printEdges(self):
         for edge in self.edges:
+            print((self.id, edge.id))
             gameboard.display(edge.board)
-        #     print((self.id, edge.id))
-        #     edge.printBoard()
+            print('-----------')
             
     def isEmpty(self):
         return len(self.edges) == 0
@@ -77,9 +77,6 @@ def nextPlayerBoardsGen(board, player):
         
         possible_moves = gameboard.calculateValidMoves(piece, board)
         
-        for i in possible_moves:
-            print(i)
-        
         possible_moves = utils.removeDuplicates(possible_moves)
         
         for move in possible_moves:
@@ -97,10 +94,12 @@ def createGameTree(board, player, depth, tree, init):
     
     if (init is None):
    
-        init = Node(board, None, 1)
+        init = Node(1, board, None, 1)
     
         tree.addNode(init)
         
+        
+    index = 2    
     while (depth > 0):
                 
         maps = nextPlayerBoardsGen(board, player)        
@@ -110,11 +109,11 @@ def createGameTree(board, player, depth, tree, init):
             
             piece = list(filter(lambda x: maps[x] == list_per_piece, maps))[0]
             
+            
+            
             for b in list_per_piece:                
-                #new_boards.index(b)+2
-                
-                #maps[new_boards.index(b)]
-                node = Node(b, piece, init.get_depth() + 1)
+
+                node = Node(index,b, piece, init.get_depth() + 1)
                 tree.addEdge(init, node)
                 
                 if player == 1:
@@ -126,7 +125,7 @@ def createGameTree(board, player, depth, tree, init):
                     tree = createGameTree(b, 1, depth - 1, tree, node)
                 
                 depth -= 1
+                
+                index += 1
    
     return tree
-
-

@@ -18,8 +18,6 @@ def test_tree():
     
     game_tree.printAllEdges()
     
-    print(len(game_tree.nodes))
-    
     return len(game_tree.nodes) == 17
 
 #print(test_tree())
