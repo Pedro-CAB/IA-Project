@@ -87,9 +87,10 @@ def nextPlayerBoardsGen(board, player, m):
         
         next_p_boards = boardGen(piece, board)
         
-        boards.extend(next_p_boards)
+        for b in next_p_boards:
+            m.append(piece)
         
-        m[len(boards)] = piece
+        boards.extend(next_p_boards)
     
     return boards
 
@@ -100,9 +101,9 @@ def createGameTree(board, player, depth, tree, init):
    
         init = Node(1, board, None, 1)
     
-        tree.addNode(init)  
+        tree.addNode(init)
         
-    maps = {}
+    maps = []
     
     while (depth > 0):
                 
@@ -110,9 +111,7 @@ def createGameTree(board, player, depth, tree, init):
         
         for b in new_boards:
             
-            key = list(filter(lambda x: maps[x] == b, maps))[0]
-            
-            node = Node(new_boards.index(b)+2, new_boards[key], init.get_depth() + 1)
+            node = Node(new_boards.index(b)+2, b, maps[new_boards.index(b)], init.get_depth() + 1)
             tree.addEdge(init, node)
             
             if player == 1:
@@ -126,3 +125,5 @@ def createGameTree(board, player, depth, tree, init):
             depth -= 1
    
     return tree
+
+

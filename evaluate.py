@@ -74,7 +74,9 @@ def getBlockedDirections(piece, board):
 
 def getBoardValue(piece, board):
     player = board[piece[1]][piece[0]];
-
+    
+    print(player)
+     
     # score_factor: 5, 10, 15, 20, 25
     # piece_value: 0*5, 1*10, 2*15, 3*20, 4*25
 
@@ -104,8 +106,6 @@ def getBoardValue(piece, board):
     
 
 
-
-
 # testada e a funcionar como pretendido
 # old_pos = piece e new_pos = move
 
@@ -116,14 +116,19 @@ def evaluate(piece, move, board):
     #             if(board[row][col] == 'A' or board[row][col] == 'B'):
     #                 getBlockedDirections((col,row), board)
     
+    gameboard.display(board)
+    
+    print(piece)
+    
+    print(move)
+    
     opponent_old_board_value, my_old_board_value = getBoardValue(piece, board);
 
     board = gameboard.make_move(piece, move, board);
 
     # print("\n\n-----------------\nA MOVE WAS MADE\n-----------------\n\n")
-
+    
     opponent_new_board_value, my_new_board_value = getBoardValue(move, board);
-
 
     # print("\nopponent_old_board_value: "+ str(opponent_old_board_value)+ "\nmy_old_board_value: "+str(my_old_board_value)+"\nopponent_new_board_value: "+str(opponent_new_board_value)+"\nmy_new_board_value: "+str(my_new_board_value))
     

@@ -19,14 +19,14 @@ class Piece:
 
 
 def minimax(node, depth, alpha, beta, maximising, player, prev_move, eval_func):
-
+  
     if depth == 0 or node.isEmpty():
-        return eval_func(node.piece, prev_move.piece, node.board) * (1 if player == 'A' else -1)
+        return eval_func(prev_move.piece, node.piece, node.board) * (1 if player == 'A' else -1)
     
     if maximising:
         max_eval = float('-inf')
         for move in node.allEdges():
-            evaluate = minimax(move, depth-1, alpha, beta, False, player, node.piece, eval_func)
+            evaluate = minimax(move, depth-1, alpha, beta, False, player, node, eval_func)
             max_eval = max(alpha, evaluate)
             alpha = max(alpha, evaluate)
             if beta <= alpha:
@@ -37,7 +37,7 @@ def minimax(node, depth, alpha, beta, maximising, player, prev_move, eval_func):
     else:
         min_eval = float('inf')
         for move in node.allEdges():
-            evaluate = minimax(move, depth-1, alpha, beta, True, player, node.piece, eval_func)
+            evaluate = minimax(move, depth-1, alpha, beta, True, player, node, eval_func)
             min_eval = min(beta, evaluate)
             beta = min(beta, evaluate)
             if alpha <= beta:
