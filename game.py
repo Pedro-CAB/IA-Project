@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 import gameboard
+import tree
+import minimax
+import evaluate
 
 def start_pvp(boardSize):
     board = createBoard(boardSize)
@@ -39,7 +42,7 @@ def turn(player,board):
     return board
 
 def choose_piece(player, board):
-    print("Which piece do you want to move?\n")
+    print("\nWhich piece do you want to move?\n")
     x = int(input("X:"))
     print("\n")
     y = int(input("Y:"))
@@ -104,5 +107,53 @@ def victory(player):
     print("Player " + str(player) + " wins!\n")
     print("Returning to menu")
 
+
+def play_pve(board, treeDepth):
+    print("Player 1 Turn!\n")
+    displayBoard(board)
+    board = turn(1,board)
+    if(hasLost(2,board)):
+        victory(1)
+    else:
+        print("Computer's Turn!\n")
+        displayBoard(board)
+        #t = tree.Tree()
+        #game_tree = tree.createGameTree(board, 2, treeDepth, t, None)
+        #res_minimax = minimax.minimax(None, treeDepth, float('-inf'), float('inf'), True, 2, game_tree.nodes[0], evaluate.evaluate)
+
+        #TODO mudar dummy values piece e move
+        
+        piece = (0, 0)
+
+        for row in range(0, len(board)):
+            for col in range(0, len(board[row])):
+                if(board[row][col] == 'B'):
+                    piece = (col, row)
+
+        move = calculateValidMoves(piece,board)[0]; 
+
+        #end todo
+
+        board = make_move(piece, move, board)
+        
+        print('\n\nComputer chose piece '+str(piece)+' and moved it to position '+ str(move)+'\n\n')
+
+        if(hasLost(1, board)):
+            victory(2)
+        else:
+            play_pve(board, treeDepth)
+
+
+        
 def start_pve(boardSize,difficulty):
-    print("<Note: Right now, difficulty modes are not implemented>\n")
+
+    board = createBoard(boardSize)
+    depth = 0
+    if(difficulty == 1):
+        depth = 2
+    elif(difficulty == 2):
+        depth = 4
+    else:
+        depth = 6
+
+    play_pve(board, depth)
