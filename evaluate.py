@@ -124,7 +124,7 @@ def evaluate(piece, move, board):
     
     # print("\nopponent_old_board_value: "+ str(opponent_old_board_value)+ "\nmy_old_board_value: "+str(my_old_board_value)+"\nopponent_new_board_value: "+str(opponent_new_board_value)+"\nmy_new_board_value: "+str(my_new_board_value))
     
-    return (opponent_new_board_value - opponent_old_board_value , my_new_board_value - my_old_board_value);
+    return ((opponent_new_board_value - opponent_old_board_value , my_new_board_value - my_old_board_value), board);
 
 
 

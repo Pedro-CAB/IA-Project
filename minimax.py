@@ -1,41 +1,29 @@
 # -*- coding: utf-8 -*-
 
-#To be decided later
-class Piece:
+import gameboard
+import copy
 
-    def __init_(self, player):
-        self.player = player #Can be 'A' for Player 1 or 'B' for Player 2
-        self.id = 0
-        self.x = 0
-        self.y = 0
-        self.blocked_directions = 0
-        
-    def set_player(self, c):
-        self.player = c
-        
-    def set_coordinates(self, x,y):
-        self.x = x
-        self.y = y
-
-
-def minimax(node, depth, alpha, beta, maximising, player, prev_move, eval_func):
+def minimax(node, depth, alpha, beta, maximising, player, prev_move, chosen_board, eval_func):
   
     if (node != None) and (depth == 0 or node.isEmpty()):
      
-        return eval_func(prev_move.piece, node.piece, prev_move.board)[1] * (1 if player == 'A' else -1)
+        value = eval_func(prev_move.piece, node.piece, prev_move.board)[0][1] * (1 if player == 'A' else -1)
+        board = eval_func(prev_move.piece, node.piece, prev_move.board)[1]
+        return (value, board, prev_move.piece, node.piece)
     
     if maximising:
         max_eval = float('-inf')
         node = prev_move
         for move in prev_move.allEdges():
             node.piece = move.origin
-            evaluate = minimax(move.node, depth-1, alpha, beta, False, player, node, eval_func)
-            print(evaluate)
-            max_eval = max(alpha, evaluate)
-            alpha = max(alpha, evaluate)
+            evaluate = minimax(move.node, depth-1, alpha, beta, False, player, node, chosen_board, eval_func)
+            max_eval = max(alpha, evaluate[0])
+            if max_eval == evaluate[0]:
+                chosen_board = copy.deepcopy(evaluate[1])
+            alpha = max(alpha, evaluate[0])
             if beta <= alpha:
                 break
-        return max_eval
+        return (max_eval, chosen_board, move.origin, move.node.piece)
 
     #Minimising (opponent's turn)
     else:
@@ -43,10 +31,12 @@ def minimax(node, depth, alpha, beta, maximising, player, prev_move, eval_func):
         node = prev_move
         for move in prev_move.allEdges():
             node.piece = move.origin
-            evaluate = minimax(move.node, depth-1, alpha, beta, True, player, node, eval_func)
-            min_eval = min(beta, evaluate)
-            beta = min(beta, evaluate)
+            evaluate = minimax(move.node, depth-1, alpha, beta, True, player, node, chosen_board, eval_func)
+            min_eval = min(beta, evaluate[0])
+            if min_eval == evaluate[0]:
+                chosen_board= copy.deepcopy(evaluate[1])
+            beta = min(beta, evaluate[0])
             if alpha <= beta:
                 break
-        return min_eval
+        return (min_eval, chosen_board, move.origin, move.node.piece)
             
