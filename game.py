@@ -175,15 +175,14 @@ def play_eve(board, treeDepth_A, treeDepth_B):
         
         print('\n\nComputer 2 chose piece '+str(res_minimax[2])+' and moved it to position '+ str(res_minimax[3])+'\n\n')
         
-        displayBoard(board)
-        
-        time.sleep(1)
 
         if(hasLost(1, board)):
             displayBoard(board)
             victory(2)
             menu.main_menu()
         else:
+            displayBoard(board)
+            time.sleep(1)
             play_eve(board, treeDepth_A, treeDepth_B)
     
     

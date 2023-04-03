@@ -10,6 +10,7 @@ def main_menu():
     option = input()
     if(option == "A"):
         choose_size()
+        main_menu()
     elif(option == "B"):
         rules()
     elif(option == "C"):
