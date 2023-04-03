@@ -21,18 +21,15 @@ class Node:
     def get_depth(self):
         return self.depth
         
-    def addEdge(self, dest):
-        if dest not in self.edges:
-            dest.set_depth(self.depth + 1)
-            self.edges.append(dest)
-        
     def allEdges(self):
         return self.edges
         
     def printEdges(self):
         for edge in self.edges:
-            print((self.id, edge.id))
-            gameboard.display(edge.board)
+            print((self.piece, edge.origin))
+            print("Depth:")
+            print(self.depth)
+            gameboard.display(edge.node.board)
             print('-----------')
             
     def isEmpty(self):
@@ -40,6 +37,13 @@ class Node:
     
     def printBoard(self):
         return gameboard.display(self.board)
+    
+    
+class Edge:
+
+    def __init__(self, origin, node):
+        self.origin = origin 
+        self.node = node
 
 class Tree:
     
@@ -49,13 +53,15 @@ class Tree:
    def addNode(self, node):
        self.nodes.append(node)
        
-   def addEdge(self, s, d):
+   def addEdge(self, s, d, piece):
        if s in self.nodes and d not in self.nodes:
-           self.addNode(d)
-           s.addEdge(d)
-           return 0
+            e = Edge(piece, d)
+            d.set_depth(s.depth + 1)
+            s.edges.append(e)
+            self.nodes.append(d)
+            return 0
        else:
-           return -1
+            return -1
        
    def printAllEdges(self):
        for n in self.nodes:
@@ -79,13 +85,15 @@ def nextPlayerBoardsGen(board, player):
         
         possible_moves = utils.removeDuplicates(possible_moves)
         
+        move = ()
+        
         for move in possible_moves:
             
             new_board = game.make_move(piece, move, board)
             
             new_boards.append(new_board)
             
-        m[piece] = list(new_boards)
+        m[(piece, move)] = list(new_boards)
         
     return m
 
@@ -97,8 +105,7 @@ def createGameTree(board, player, depth, tree, init):
         init = Node(1, board, None, 1)
     
         tree.addNode(init)
-        
-        
+             
     index = 2    
     while (depth > 0):
                 
@@ -107,14 +114,12 @@ def createGameTree(board, player, depth, tree, init):
         
         for list_per_piece in new_boards:
             
-            piece = list(filter(lambda x: maps[x] == list_per_piece, maps))[0]
-            
-            
+            (piece, move) = list(filter(lambda x: maps[x] == list_per_piece, maps))[0]
             
             for b in list_per_piece:                
 
-                node = Node(index,b, piece, init.get_depth() + 1)
-                tree.addEdge(init, node)
+                node = Node(index,b, move, init.get_depth() + 1)
+                tree.addEdge(init, node, piece)
                 
                 if player == 1:
                     
