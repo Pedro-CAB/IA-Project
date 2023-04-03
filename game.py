@@ -3,6 +3,7 @@ import gameboard
 import tree
 import minimax
 import evaluate
+import time
 
 def start_pvp(boardSize):
     board = createBoard(boardSize)
@@ -133,6 +134,40 @@ def play_pve(board, treeDepth):
             play_pve(board, treeDepth)
 
 
+def play_eve(board, treeDepth_A, treeDepth_B):
+    print("Computer 1 Turn!\n")
+    displayBoard(board)
+    board = turn(1, board)
+    t = tree.Tree()
+    game_tree = tree.createGameTree(board, 2, treeDepth_A, t, None)
+    res_minimax = minimax.minimax(None, treeDepth_A, float('-inf'), float('inf'), True, 2, game_tree.nodes[0], board, evaluate.evaluate)
+
+    board = res_minimax[1]
+    
+    print('\n\nComputer chose piece '+str(res_minimax[2])+' and moved it to position '+ str(res_minimax[3])+'\n\n')
+    time.sleep(1)
+    if(hasLost(2,board)):
+        displayBoard(board)
+        victory(1)
+    else:
+        print("Computer 2 Turn!\n")
+        game_tree = tree.createGameTree(board, 2, treeDepth_B, t, None)
+        res_minimax = minimax.minimax(None, treeDepth_B, float('-inf'), float('inf'), True, 2, game_tree.nodes[0], board, evaluate.evaluate)
+
+        board = res_minimax[1]
+        
+        print('\n\nComputer chose piece '+str(res_minimax[2])+' and moved it to position '+ str(res_minimax[3])+'\n\n')
+        time.sleep(1)
+
+        if(hasLost(1, board)):
+            displayBoard(board)
+            victory(2)
+        else:
+            play_pve(board, treeDepth_A, treeDepth_B)
+    
+    
+
+
         
 def start_pve(boardSize,difficulty):
 
@@ -146,3 +181,27 @@ def start_pve(boardSize,difficulty):
         depth = 6
 
     play_pve(board, depth)
+    
+    
+def start_eve(boardSize, dif_A, dif_B):
+    board =createBoard(boardSize)
+    depth_A = 0
+    if(dif_A == 1):
+        depth_A = 2
+    elif(dif_A == 2):
+        depth_A = 4
+    else:
+        depth_A = 6
+        
+    depth_B = 0
+    if(dif_B == 1):
+        depth_B = 2
+    elif(dif_B == 2):
+        depth_B = 4
+    else:
+        depth_B = 6
+    
+    play_eve(board, depth_A, depth_B)
+    
+    
+    

@@ -38,16 +38,54 @@ def choose_size():
 def choose_mode(boardSize):
     print("--- Game Mode ---\n")
     print("Which difficulty do you want to play in?\n")
-    print("A)Player vs Player\nB)Player vs PC\n")
+    print("A)Player vs Player\nB)Player vs PC\nC)PC vs PC")
     option = input()
     if(option == "A"):
         game.start_pvp(boardSize)
         main_menu()
     elif(option == "B"):
         choose_difficulty(boardSize)
+    elif(option == "C"):
+        choose_difficulty_c(boardSize)
     else:
         print("Invalid Input. Try Again.\n")
         choose_mode()
+        
+def choose_difficulty_c(boardSize):
+    print("--- Set Difficulty ---\n")
+    print("Which difficulty do you want for PC 1?\n")
+    print("A)Easy\nB)Medium\nC)Hard\n")
+    option1 = input()
+    dif_A = 0   
+    
+    if(option1 == "A"):
+        dif_A = 1
+    elif(option1 == "B"):
+        dif_A = 2
+    elif(option1 == "C"):
+        dif_A = 3
+    else:
+        print("Invalid Input. Try Again.\n")
+        choose_difficulty(boardSize)
+        
+    print("Which difficulty do you want for PC 2?\n")
+    print("A)Easy\nB)Medium\nC)Hard\n")
+    option1 = input()
+    dif_B = 0   
+    
+    if(option1 == "A"):
+        dif_B = 1
+    elif(option1 == "B"):
+        dif_B = 2
+    elif(option1 == "C"):
+        dif_B = 3
+    else:
+        print("Invalid Input. Try Again.\n")
+        choose_difficulty(boardSize)
+        
+    game.start_eve(boardSize, dif_A, dif_B)
+    
+
     
 def choose_difficulty(boardSize):
     print("--- Set Difficulty ---\n")
