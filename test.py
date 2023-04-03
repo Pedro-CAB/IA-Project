@@ -40,7 +40,7 @@ def test_minimax():
     
     chosen_board = []
     
-    res_minimax = minimax.minimax(None, 5, float('-inf'), float('inf'), True, 1, game_tree.nodes[0], chosen_board, evaluate.evaluate)
+    res_minimax = minimax.minimax(None, 5, float('-inf'), float('inf'), True, 2, game_tree.nodes[0], chosen_board, evaluate.evaluate)
     
     return res_minimax
 

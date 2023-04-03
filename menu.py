@@ -81,7 +81,7 @@ def choose_difficulty_c(boardSize):
         dif_B = 3
     else:
         print("Invalid Input. Try Again.\n")
-        choose_difficulty(boardSize)
+        choose_difficulty_c(boardSize)
         
     game.start_eve(boardSize, dif_A, dif_B)
     

@@ -7,7 +7,7 @@ def minimax(node, depth, alpha, beta, maximising, player, prev_move, chosen_boar
   
     if (node != None) and (depth == 0 or node.isEmpty()):
      
-        value = eval_func(prev_move.piece, node.piece, prev_move.board)[0][1] * (1 if player == 'A' else -1)
+        value = eval_func(prev_move.piece, node.piece, prev_move.board)[0][1] * (1 if player == 1 else -1)
         board = eval_func(prev_move.piece, node.piece, prev_move.board)[1]
         return (value, board, prev_move.piece, node.piece)
     

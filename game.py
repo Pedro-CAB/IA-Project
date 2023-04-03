@@ -143,33 +143,40 @@ def play_pve(board, treeDepth):
 def play_eve(board, treeDepth_A, treeDepth_B):
     print("Computer 1 Turn!\n")
     displayBoard(board)
-    board = turn(1, board)
     t = tree.Tree()
-    game_tree = tree.createGameTree(board, 2, treeDepth_A, t, None)
-    res_minimax = minimax.minimax(None, treeDepth_A, float('-inf'), float('inf'), True, 2, game_tree.nodes[0], board, evaluate.evaluate)
+    game_tree = tree.createGameTree(board, 1, treeDepth_A, t, None)
+    res_minimax = minimax.minimax(None, treeDepth_A, float('-inf'), float('inf'), True, 1, game_tree.nodes[0], board, evaluate.evaluate)
+
 
     board = res_minimax[1]
+    time.sleep(1)
+    print('\n\nComputer 1 chose piece '+str(res_minimax[2])+' and moved it to position '+ str(res_minimax[3])+'\n\n')
     
-    print('\n\nComputer chose piece '+str(res_minimax[2])+' and moved it to position '+ str(res_minimax[3])+'\n\n')
+    displayBoard(board)
     time.sleep(1)
     if(hasLost(2,board)):
         displayBoard(board)
         victory(1)
     else:
         print("Computer 2 Turn!\n")
+        time.sleep(1)
+        t = tree.Tree()
         game_tree = tree.createGameTree(board, 2, treeDepth_B, t, None)
         res_minimax = minimax.minimax(None, treeDepth_B, float('-inf'), float('inf'), True, 2, game_tree.nodes[0], board, evaluate.evaluate)
 
         board = res_minimax[1]
         
-        print('\n\nComputer chose piece '+str(res_minimax[2])+' and moved it to position '+ str(res_minimax[3])+'\n\n')
+        print('\n\nComputer 2 chose piece '+str(res_minimax[2])+' and moved it to position '+ str(res_minimax[3])+'\n\n')
+        
+        displayBoard(board)
+        
         time.sleep(1)
 
         if(hasLost(1, board)):
             displayBoard(board)
             victory(2)
         else:
-            play_pve(board, treeDepth_A, treeDepth_B)
+            play_eve(board, treeDepth_A, treeDepth_B)
     
     
 
