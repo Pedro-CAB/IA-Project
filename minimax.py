@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import gameboard
-
-
 #To be decided later
 class Piece:
 
@@ -20,85 +17,36 @@ class Piece:
         self.x = x
         self.y = y
 
-class Node:
-    
-    def __init__(self, id, board):
-        self.id = id
-        self.board = board
-        self.visited = False
-        self.depth = 0
-        self.edges = []
-        
-    def set_depth(self, depth):
-        self.depth = depth
 
-        
-    def addEdge(self, dest):
-        dest.set_depth(self.depth + 1)
-        self.edges.append(dest)
-        
-    def allEdges(self):
-        return self.edges
-        
-    def printEdges(self):
-        for edge in self.edges:
-            print((self.id, edge.id))
-            
-    def isEmpty(self):
-        return len(self.edges) == 0
-        
-    
-
-class Tree:
-    
-   def __init__(self):
-       self.nodes = set()
-       self.edges = []
-       
-
-   def addNode(self, node):
-       self.nodes.add(node)
-       
-   def addEdge(self, s, d):
-       if s in self.nodes and d in self.nodes:
-           s.addEdge(d)
-           return 0
-       else:
-           return -1
-       
-   def printAllEdges(self):
-       for n in self.nodes:
-           n.printEdges()
-       
-        
-
-
-
-def minimax(node, depth, alpha, beta, maximising, player, maxPlayer, eval_func):
-    if depth == 0 or node.isEmpty():
-        return eval_func(node) * (1 if player == 'A' else -1)
+def minimax(node, depth, alpha, beta, maximising, player, prev_move, eval_func):
+  
+    if (node != None) and (depth == 0 or node.isEmpty()):
+     
+        return eval_func(prev_move.piece, node.piece, prev_move.board)[1] * (1 if player == 'A' else -1)
     
     if maximising:
         max_eval = float('-inf')
-        for move in node.allEdges():
-            new_node = 1 #TODO Usar o move (o outro nó)
-            evaluate = minimax(new_node, depth-1, alpha, beta, False, player, eval_func)
+        node = prev_move
+        for move in prev_move.allEdges():
+            node.piece = move.origin
+            evaluate = minimax(move.node, depth-1, alpha, beta, False, player, node, eval_func)
+            print(evaluate)
             max_eval = max(alpha, evaluate)
             alpha = max(alpha, evaluate)
             if beta <= alpha:
                 break
-            return max_eval
+        return max_eval
 
-    #Minimimsing (opponent's turn)
+    #Minimising (opponent's turn)
     else:
         min_eval = float('inf')
-        for move in node.allEdges():
-            new_node = 2 #TODO
-            evaluate = minimax(new_node, depth-1, alpha, beta, True, player, eval_func)
+        node = prev_move
+        for move in prev_move.allEdges():
+            node.piece = move.origin
+            evaluate = minimax(move.node, depth-1, alpha, beta, True, player, node, eval_func)
             min_eval = min(beta, evaluate)
             beta = min(beta, evaluate)
-            
-            if beta <= alpha:
+            if alpha <= beta:
                 break
-            return min_eval
+        return min_eval
             

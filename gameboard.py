@@ -125,7 +125,7 @@ def calculateCircleMoves(piece,board):
     middle = middleOfSide(len(board)) - 1
     if identifySector(piece, board) == 1:
         if (x == middle):
-            clockwise += (x+1,y,board[y][x+1])
+            clockwise += [(x+1,y,board[y][x+1])]
             final = [(x-1,y,board[y][x-1])]
         elif (x == middle - 1):
             clockwise += [(x+1,y,board[y][x+1]),(x+2,y,board[y][x+2])]
@@ -143,7 +143,7 @@ def calculateCircleMoves(piece,board):
         clockwise += b
     elif identifySector(piece, board) == 2:
         if (y == middle):
-            clockwise += (x,y+1,board[y+1][x])
+            clockwise += [(x,y+1,board[y+1][x])]
             final = [(x,y-1,board[y-1][x])]
         elif (y == middle - 1):
             final = [(x,y+2,board[y+2][x]),(x,y+1,board[y+1][x])]
@@ -157,8 +157,8 @@ def calculateCircleMoves(piece,board):
         clockwise += utils.extractLin(board, upperLine) + utils.extractCol(board, rightCol) + a
     elif identifySector(piece, board) == 4:
         if (y == middle):
-            final = (x,y+1,board[y+1][x])
-            clockwise += (x,y-1,board[y-1][x])
+            final = [(x,y+1,board[y+1][x])]
+            clockwise += [(x,y-1,board[y-1][x])]
         elif (y == middle - 1):
             clockwise += [(x,y+1,board[y+1][x]),(x,y+2,board[y+2][x])]
             final = []
@@ -173,8 +173,8 @@ def calculateCircleMoves(piece,board):
         clockwise += a + b + utils.extractLin(board, upperLine)
     elif identifySector(piece, board) == 5:
         if (x == middle):
-            final = (x+1,y,board[y][x+1])
-            clockwise += (x-1,y,board[y][x-1])
+            final = [(x+1,y,board[y][x+1])]
+            clockwise += [(x-1,y,board[y][x-1])]
         elif (x == middle - 1):
             final = [(x+2,y,board[y][x+2]),(x+1,y,board[y][x+1])]
         elif (x == middle + 1):
@@ -233,3 +233,25 @@ def middleOfSide(side):
         return integer + 1
     else:
         return integer
+    
+def getAllPieceCoords(board):
+    return getPieceCoords(board,1) + getPieceCoords(board,2)
+    
+def getPieceCoords(board, player):
+    coords = []
+    if player == 1:
+        char = 'A'
+    elif player == 2:
+        char = 'B'
+    else:
+        return []
+    x = y = 0
+    for line in board:
+        for spot in line:
+            if spot == char:
+                coords.append((x,y))
+            x += 1
+        x = 0
+        y += 1
+    return coords
+        
