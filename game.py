@@ -4,6 +4,7 @@ import tree
 import minimax
 import evaluate
 import time
+import menu
 
 def start_pvp(boardSize):
     board = createBoard(boardSize)
@@ -15,12 +16,14 @@ def play_pvp(board):
     board = turn(1,board)
     if(hasLost(2,board)):
         victory(1)
+        menu.main_menu()
     else:
         print("Player 2 Turn!\n")
         displayBoard(board)
         board = turn(2,board)
         if(hasLost(1, board)):
             victory(2)
+            menu.main_menu()
         else:
             play_pvp(board)
 
@@ -122,6 +125,7 @@ def play_pve(board, treeDepth):
     if(hasLost(2,board)):
         displayBoard(board)
         victory(1)
+        menu.main_menu()
     else:
         print("Computer's Turn!\n")
         displayBoard(board)
@@ -136,6 +140,7 @@ def play_pve(board, treeDepth):
         if(hasLost(1, board)):
             displayBoard(board)
             victory(2)
+            menu.main_menu()
         else:
             play_pve(board, treeDepth)
 
@@ -157,6 +162,8 @@ def play_eve(board, treeDepth_A, treeDepth_B):
     if(hasLost(2,board)):
         displayBoard(board)
         victory(1)
+        menu.main_menu()
+        
     else:
         print("Computer 2 Turn!\n")
         time.sleep(1)
@@ -175,6 +182,7 @@ def play_eve(board, treeDepth_A, treeDepth_B):
         if(hasLost(1, board)):
             displayBoard(board)
             victory(2)
+            menu.main_menu()
         else:
             play_eve(board, treeDepth_A, treeDepth_B)
     

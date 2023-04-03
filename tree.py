@@ -4,6 +4,7 @@
 import gameboard
 import game
 import utils
+import random
 
 class Node:
     
@@ -22,6 +23,7 @@ class Node:
         return self.depth
         
     def allEdges(self):
+        random.shuffle(self.edges)
         return self.edges
         
     def printEdges(self):
@@ -110,11 +112,13 @@ def createGameTree(board, player, depth, tree, init):
     while (depth > 0):
                 
         maps = nextPlayerBoardsGen(board, player)        
-        new_boards = maps.values()                
+        new_boards = maps.values()
         
-        for list_per_piece in new_boards:
-            
+        for list_per_piece in new_boards:            
+        
             (piece, move) = list(filter(lambda x: maps[x] == list_per_piece, maps))[0]
+            
+            random.shuffle(list_per_piece)
             
             for b in list_per_piece:                
 

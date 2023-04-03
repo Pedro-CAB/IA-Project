@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import gameboard
 import copy
+import random
 
 def minimax(node, depth, alpha, beta, maximising, player, prev_move, chosen_board, eval_func):
   
@@ -14,6 +14,7 @@ def minimax(node, depth, alpha, beta, maximising, player, prev_move, chosen_boar
     if maximising:
         max_eval = float('-inf')
         node = prev_move
+        random.shuffle(prev_move.edges)
         for move in prev_move.allEdges():
             node.piece = move.origin
             evaluate = minimax(move.node, depth-1, alpha, beta, False, player, node, chosen_board, eval_func)
@@ -29,6 +30,7 @@ def minimax(node, depth, alpha, beta, maximising, player, prev_move, chosen_boar
     else:
         min_eval = float('inf')
         node = prev_move
+        random.shuffle(prev_move.edges)
         for move in prev_move.allEdges():
             node.piece = move.origin
             evaluate = minimax(move.node, depth-1, alpha, beta, True, player, node, chosen_board, eval_func)

@@ -1,5 +1,4 @@
 import gameboard
-import copy
 
 # testada e a funcionar como pretendido
 def getBlockedDirections(piece, board):
