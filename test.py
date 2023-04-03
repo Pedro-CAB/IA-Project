@@ -16,8 +16,6 @@ def test_tree():
     
     game_tree = tree.createGameTree(board, 1, 1, t, None)
     
-    #game_tree.printAllEdges()
-    
     print(len(game_tree.nodes))
     
     return len(game_tree.nodes) == 17
@@ -40,8 +38,10 @@ def test_minimax():
     
     #game_tree.printAllEdges()
     
-    res_minimax = minimax.minimax(None, 5, float('-inf'), float('inf'), True, 1, game_tree.nodes[0], evaluate.evaluate)
+    chosen_board = []
+    
+    res_minimax = minimax.minimax(None, 5, float('-inf'), float('inf'), True, 1, game_tree.nodes[0], chosen_board, evaluate.evaluate)
     
     return res_minimax
 
-test_minimax()
+print(test_minimax())

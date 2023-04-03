@@ -113,32 +113,21 @@ def play_pve(board, treeDepth):
     displayBoard(board)
     board = turn(1,board)
     if(hasLost(2,board)):
+        displayBoard(board)
         victory(1)
     else:
         print("Computer's Turn!\n")
         displayBoard(board)
-        #t = tree.Tree()
-        #game_tree = tree.createGameTree(board, 2, treeDepth, t, None)
-        #res_minimax = minimax.minimax(None, treeDepth, float('-inf'), float('inf'), True, 2, game_tree.nodes[0], evaluate.evaluate)
+        t = tree.Tree()
+        game_tree = tree.createGameTree(board, 2, treeDepth, t, None)
+        res_minimax = minimax.minimax(None, treeDepth, float('-inf'), float('inf'), True, 2, game_tree.nodes[0], board, evaluate.evaluate)
 
-        #TODO mudar dummy values piece e move
+        board = res_minimax[1]
         
-        piece = (0, 0)
-
-        for row in range(0, len(board)):
-            for col in range(0, len(board[row])):
-                if(board[row][col] == 'B'):
-                    piece = (col, row)
-
-        move = calculateValidMoves(piece,board)[0]; 
-
-        #end todo
-
-        board = make_move(piece, move, board)
-        
-        print('\n\nComputer chose piece '+str(piece)+' and moved it to position '+ str(move)+'\n\n')
+        print('\n\nComputer chose piece '+str(res_minimax[2])+' and moved it to position '+ str(res_minimax[3])+'\n\n')
 
         if(hasLost(1, board)):
+            displayBoard(board)
             victory(2)
         else:
             play_pve(board, treeDepth)
