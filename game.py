@@ -49,7 +49,10 @@ def choose_piece(player, board):
     y = int(input("Y:"))
     print("\n")
     piece = (x,y)
-    if isPlayerPiece(player,board,piece):
+    if (x < 0 or x >= len(board) or y < 0 or y >= len(board)):
+        print("Invalid board position! Try again.\n")
+        return (-1,-1)
+    elif isPlayerPiece(player,board,piece):
         return piece
     else:
         print("That is not a piece of yours! Try again.\n")
@@ -64,7 +67,10 @@ def choose_move(player, piece, board):
     y = int(input("Y:"))
     print("\n")
     move = (x,y)
-    if isValidMove(piece,move,board):
+    if (x < 0 or x >= len(board) or y < 0 or y >= len(board)):
+        print("Invalid board position! Try again.\n")
+        return (-1,-1)
+    elif isValidMove(piece,move,board):
         return move
     else:
         print("That is not a valid move! Try again.\n")

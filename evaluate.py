@@ -103,6 +103,31 @@ def getBoardValue(piece, board):
         return (a_board_value, b_board_value)
     
 
+def getAlternativeBoardValue(piece, board):
+    player = board[piece[1]][piece[0]];
+     
+    # piece_value: 0, 1, 2, 3, 4 - number of blocked directions
+
+    a_board_value = 0;
+    b_board_value = 0;
+
+    for row in range(0, len(board)):
+        for col in range(0, len(board[row])):
+            if(board[row][col] == 'A'):
+                blocked_directions = getBlockedDirections((col,row), board)
+                a_board_value += blocked_directions;
+            
+            elif(board[row][col] == 'B'):
+                blocked_directions = getBlockedDirections((col,row), board)
+                b_board_value += blocked_directions;
+
+    if(player == 'A'):
+        # opponent_board_value vem em primeiro lugar sempre
+        return (b_board_value, a_board_value);
+    
+    elif(player == 'B'):
+        return (a_board_value, b_board_value)
+
 
 # testada e a funcionar como pretendido
 # old_pos = piece e new_pos = move
