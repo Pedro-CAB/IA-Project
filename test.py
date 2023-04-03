@@ -36,11 +36,11 @@ def test_minimax():
 
     t = tree.Tree()
     
-    game_tree = tree.createGameTree(board, 1, 5, t, None)
+    game_tree = tree.createGameTree(board, 1, 12, t, None)
     
     game_tree.printAllEdges()
     
-    res_minimax = minimax.minimax(None, 5, float('-inf'), float('inf'), True, 1, game_tree.nodes[0], evaluate.evaluate)
+    res_minimax = minimax.minimax(None, 12, float('-inf'), float('inf'), True, 1, game_tree.nodes[0], evaluate.evaluate)
     
     return res_minimax
 
