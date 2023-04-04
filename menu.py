@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import game
-
+import evaluate
 
 # This method will display the main menu on the terminal
 def main_menu():
@@ -77,7 +77,7 @@ def choose_difficulty_c(boardSize):
         dif_A = 3
     else:
         print("Invalid Input. Try Again.\n")
-        choose_difficulty(boardSize)
+        choose_difficulty_c(boardSize)
         
     print("Which difficulty do you want for PC 2?\n")
     print("A)Easy\nB)Medium\nC)Hard\n")
@@ -104,19 +104,38 @@ def choose_difficulty(boardSize):
     print("Which difficulty do you want to play in?\n")
     print("A)Easy\nB)Medium\nC)Hard\n")
     option = input()
+    difficulty = 0
     if(option == "A"):
-        game.start_pve(boardSize,1)
+        difficulty = 1
     elif(option == "B"):
-        game.start_pve(boardSize,2)
+        difficulty = 2
     elif(option == "C"):
-        game.start_pve(boardSize,3)
+        difficulty = 3
     else:
         print("Invalid Input. Try Again.\n")
         choose_difficulty(boardSize)
+        
+    choose_eval(boardSize, difficulty)
+        
+        
+def choose_eval(boardSize, difficulty):
+    print("--- Set Evaluation function ---\n")      
+    print("Which evaluation function do you want to use?\n")
+    print("A)With Points\nB)Alternative (just privilege max number of block directions?\n")
+    option = input()
+    if(option == "A"):
+        game.start_pve(boardSize,difficulty, evaluate.getBoardValue)
+    elif(option == "B"):
+        game.start_pve(boardSize,difficulty, evaluate.getAlternativeBoardValue)
+    else:
+        print("Invalid Input. Try Again.\n")
+        choose_eval(boardSize, difficulty)  
+        
+        
         
 # This method will present the game's rules.
 def rules():
     print("-------Wana-Rules-------")
     print("Your objective in Wana is\nto make your opponent start\nhis/her turn with a stuck\npiece, making him/her lose\nif that happens. Pieces can\nmove as much as they want\nfollowing a line and you\ncan move one piece per turn\n")
-    option = input("\n\n<Press any key to Return to Menu>\n")
+    input("\n\n<Press any key to Return to Menu>\n")
     main_menu()

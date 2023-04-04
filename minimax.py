@@ -12,12 +12,12 @@ import random
 # In the prev_move it will be stored the move/board that originated the chosen
 # and in the chosen_board will be the board of the chosen play.
 # The alpha and beta variables will ensure the game tree pruning.
-def minimax(node, depth, alpha, beta, maximising, player, prev_move, chosen_board, eval_func):
+def minimax(node, depth, alpha, beta, maximising, player, prev_move, chosen_board, eval_func, heuristic):
   
     if (node != None) and (depth == 0 or node.isEmpty()):
      
-        value = eval_func(prev_move.piece, node.piece, prev_move.board)[0][1] * (1 if player == 1 else -1)
-        board = eval_func(prev_move.piece, node.piece, prev_move.board)[1]
+        value = eval_func(prev_move.piece, node.piece, prev_move.board, heuristic)[0][1] * (1 if player == 1 else -1)
+        board = eval_func(prev_move.piece, node.piece, prev_move.board, heuristic)[1]
         return (value, board, prev_move.piece, node.piece)
     
     if maximising:
@@ -26,7 +26,7 @@ def minimax(node, depth, alpha, beta, maximising, player, prev_move, chosen_boar
         random.shuffle(prev_move.edges)
         for move in prev_move.allEdges():
             node.piece = move.origin
-            evaluate = minimax(move.node, depth-1, alpha, beta, False, player, node, chosen_board, eval_func)
+            evaluate = minimax(move.node, depth-1, alpha, beta, False, player, node, chosen_board, eval_func, heuristic)
             max_eval = max(alpha, evaluate[0])
             if max_eval == evaluate[0]:
                 chosen_board = copy.deepcopy(evaluate[1])
@@ -42,7 +42,7 @@ def minimax(node, depth, alpha, beta, maximising, player, prev_move, chosen_boar
         random.shuffle(prev_move.edges)
         for move in prev_move.allEdges():
             node.piece = move.origin
-            evaluate = minimax(move.node, depth-1, alpha, beta, True, player, node, chosen_board, eval_func)
+            evaluate = minimax(move.node, depth-1, alpha, beta, True, player, node, chosen_board, eval_func, heuristic)
             min_eval = min(beta, evaluate[0])
             if min_eval == evaluate[0]:
                 chosen_board= copy.deepcopy(evaluate[1])

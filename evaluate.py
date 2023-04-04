@@ -140,20 +140,20 @@ def getAlternativeBoardValue(piece, board):
 # old_pos = piece e new_pos = move
 
 # This method will evaluate the board after a move of a piece was made.
-def evaluate(piece, move, board):
+def evaluate(piece, move, board, heuristic):
 
     # for row in range(0, len(board)):
     #         for col in range(0, len(board[row])):
     #             if(board[row][col] == 'A' or board[row][col] == 'B'):
     #                 getBlockedDirections((col,row), board)
     
-    opponent_old_board_value, my_old_board_value = getAlternativeBoardValue(piece, board);
+    opponent_old_board_value, my_old_board_value = heuristic(piece, board);
     
     board = gameboard.make_move(piece, move, board);
 
     # print("\n\n-----------------\nA MOVE WAS MADE\n-----------------\n\n")
     
-    opponent_new_board_value, my_new_board_value = getAlternativeBoardValue(move, board);
+    opponent_new_board_value, my_new_board_value = heuristic(move, board);
     
     # print("\nopponent_old_board_value: "+ str(opponent_old_board_value)+ "\nmy_old_board_value: "+str(my_old_board_value)+"\nopponent_new_board_value: "+str(opponent_new_board_value)+"\nmy_new_board_value: "+str(my_new_board_value))
     

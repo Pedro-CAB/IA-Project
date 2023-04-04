@@ -141,7 +141,7 @@ def victory(player):
 # This method ensures the game logic of the game in Player vs PC mode, given a 
 # board and the tree depth of the decision game tree of the PC, which is defined
 # by its difficulty.
-def play_pve(board, treeDepth):
+def play_pve(board, treeDepth, heuristic):
     print("Player 1 Turn!\n")
     displayBoard(board)
     board = turn(1,board)
@@ -154,7 +154,7 @@ def play_pve(board, treeDepth):
         displayBoard(board)
         t = tree.Tree()
         game_tree = tree.createGameTree(board, 2, treeDepth, t, None)
-        res_minimax = minimax.minimax(None, treeDepth, float('-inf'), float('inf'), True, 2, game_tree.nodes[0], board, evaluate.evaluate)
+        res_minimax = minimax.minimax(None, treeDepth, float('-inf'), float('inf'), True, 2, game_tree.nodes[0], board, evaluate.evaluate, heuristic)
 
         board = res_minimax[1]
         
@@ -165,7 +165,7 @@ def play_pve(board, treeDepth):
             victory(2)
             menu.main_menu()
         else:
-            play_pve(board, treeDepth)
+            play_pve(board, treeDepth, heuristic)
 
 # This method ensures the game logic of the game in PC vs PC mode, given a 
 # board and the tree depth of the decision game tree of both PC's, which are defined
@@ -212,7 +212,7 @@ def play_eve(board, treeDepth_A, treeDepth_B):
         
 # This method will start a Player vs PC match, according to the chosen difficulty
 # and boardSize.
-def start_pve(boardSize,difficulty):
+def start_pve(boardSize,difficulty, eval_func):
 
     board = createBoard(boardSize)
     depth = 0
@@ -223,7 +223,7 @@ def start_pve(boardSize,difficulty):
     else:
         depth = 6
 
-    play_pve(board, depth)
+    play_pve(board, depth, eval_func)
     
 # This method will start a PC vs PC match, according to the chosen PC's' difficulty
 # and boardSize.  
