@@ -1,6 +1,9 @@
 import gameboard
 
 # testada e a funcionar como pretendido
+
+# This method will retrieve the number of directions blocked of a piece in a
+# given board.
 def getBlockedDirections(piece, board):
     
     count = 4;
@@ -71,6 +74,10 @@ def getBlockedDirections(piece, board):
 
 # testada e a funcionar como pretendido
 
+# This method retrieves the board's value according to the main heuristic function.
+# This will add points to the board according to the number of blocked
+# directions. As a result it will privelege moves that blocks an opponent piece
+# the maximum directions possible
 def getBoardValue(piece, board):
     player = board[piece[1]][piece[0]];
      
@@ -101,7 +108,8 @@ def getBoardValue(piece, board):
     elif(player == 'B'):
         return (a_board_value, b_board_value)
     
-
+# This is the Alternative evaluate function, which will simply privilege maximise
+# the moves that will lead to the maximum number of blocked directions.
 def getAlternativeBoardValue(piece, board):
     player = board[piece[1]][piece[0]];
      
@@ -131,6 +139,7 @@ def getAlternativeBoardValue(piece, board):
 # testada e a funcionar como pretendido
 # old_pos = piece e new_pos = move
 
+# This method will evaluate the board after a move of a piece was made.
 def evaluate(piece, move, board):
 
     # for row in range(0, len(board)):
@@ -149,10 +158,5 @@ def evaluate(piece, move, board):
     # print("\nopponent_old_board_value: "+ str(opponent_old_board_value)+ "\nmy_old_board_value: "+str(my_old_board_value)+"\nopponent_new_board_value: "+str(opponent_new_board_value)+"\nmy_new_board_value: "+str(my_new_board_value))
     
     return ((opponent_new_board_value - opponent_old_board_value , my_new_board_value - my_old_board_value), board);
-
-
-
-
-
 
 # おっぱい ♥ ♡  -- Drop Em Out by Wheeler Walker Jr
