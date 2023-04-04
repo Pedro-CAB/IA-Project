@@ -121,7 +121,7 @@ def choose_difficulty(boardSize):
 def choose_eval(boardSize, difficulty):
     print("--- Set Evaluation function ---\n")      
     print("Which evaluation function do you want to use?\n")
-    print("A)With Points\nB)Alternative (just privilege max number of block directions?\n")
+    print("A)With Points\nB)Alternative (just privilege max number of block directions)?\n")
     option = input()
     if(option == "A"):
         game.start_pve(boardSize,difficulty, evaluate.getBoardValue)
