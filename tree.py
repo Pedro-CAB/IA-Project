@@ -6,6 +6,7 @@ import game
 import utils
 import random
 
+# Class Node of a Tree
 class Node:
     
     def __init__(self, id, board, piece, depth):
@@ -40,13 +41,14 @@ class Node:
     def printBoard(self):
         return gameboard.display(self.board)
     
-    
+# Class Edge betweeen Nodes of a Tree
 class Edge:
 
     def __init__(self, origin, node):
         self.origin = origin 
         self.node = node
 
+# Class of a game Tree
 class Tree:
     
    def __init__(self):
@@ -72,7 +74,8 @@ class Tree:
    def addTree(self, s1, s2):
        self.addEdge(s1, s2)
 
-
+# This method will generate the possible boards for all possible moves of the
+# pieces of the input player and stores them in a dictionary.
 def nextPlayerBoardsGen(board, player):
     
     m = {}
@@ -99,7 +102,11 @@ def nextPlayerBoardsGen(board, player):
         
     return m
 
-
+# This method will create the Game Tree, starting by the board stored in 
+# the initial node Init and generate the possible moves with the help of 
+# nextPlayerBoardsGen(board, player). For each move create there, it creates
+# another tree recursively and alternating the player, in order to make the 
+# Min and Max layers
 def createGameTree(board, player, depth, tree, init):
     
     if (init is None):

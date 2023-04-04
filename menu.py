@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import game
 
+
+# This method will display the main menu on the terminal
 def main_menu():
     print("--- Welcome to Wana! ---\n")
     print("Select an option below:\n")
@@ -21,6 +23,8 @@ def main_menu():
         print("Invalid Option Selected. Try Again\n")
         main_menu()
 
+
+# This method will allow user to choose the board's size.
 def choose_size():
     print("--- Board Size ---\n")
     print("Select how many pieces each player will play with.\n")
@@ -35,7 +39,10 @@ def choose_size():
     else:
         print("Please insert a number.\n")
         choose_size()
-        
+   
+
+# This method will allow user choose the game mode (Player vs Player, Player vs PC, PC vs PC),
+# according to the given boardSize
 def choose_mode(boardSize):
     print("--- Game Mode ---\n")
     print("Which difficulty do you want to play in?\n")
@@ -52,6 +59,9 @@ def choose_mode(boardSize):
         print("Invalid Input. Try Again.\n")
         choose_mode()
         
+
+# This method will allow user choose the difficulty of both PC's in the last 
+# game mode (PC vs PC).
 def choose_difficulty_c(boardSize):
     print("--- Set Difficulty ---\n")
     print("Which difficulty do you want for PC 1?\n")
@@ -87,7 +97,8 @@ def choose_difficulty_c(boardSize):
     game.start_eve(boardSize, dif_A, dif_B)
     
 
-    
+# This method will allow user choose the difficulty of the PC in the second
+# game mode (Player vs PC). 
 def choose_difficulty(boardSize):
     print("--- Set Difficulty ---\n")
     print("Which difficulty do you want to play in?\n")
@@ -103,6 +114,7 @@ def choose_difficulty(boardSize):
         print("Invalid Input. Try Again.\n")
         choose_difficulty(boardSize)
         
+# This method will present the game's rules.
 def rules():
     print("-------Wana-Rules-------")
     print("Your objective in Wana is\nto make your opponent start\nhis/her turn with a stuck\npiece, making him/her lose\nif that happens. Pieces can\nmove as much as they want\nfollowing a line and you\ncan move one piece per turn\n")

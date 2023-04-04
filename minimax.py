@@ -3,6 +3,15 @@
 import copy
 import random
 
+
+# This method will ensure that the computers use the minimax algorithm in the
+# PC modes. Given a node and its depth, it will calculate the value of the
+# possible plays below (according to the input player) and evaluates each play
+# with the help of eval_func and its perspective- whether it is supposed to
+# maximise or minimise the play's value.
+# In the prev_move it will be stored the move/board that originated the chosen
+# and in the chosen_board will be the board of the chosen play.
+# The alpha and beta variables will ensure the game tree pruning.
 def minimax(node, depth, alpha, beta, maximising, player, prev_move, chosen_board, eval_func):
   
     if (node != None) and (depth == 0 or node.isEmpty()):

@@ -6,10 +6,15 @@ import evaluate
 import time
 import menu
 
+
+# This method will start a Player vs Player match, according to the given 
+# BoardSize.
 def start_pvp(boardSize):
     board = createBoard(boardSize)
     play_pvp(board)
-    
+  
+# This method will assure the game flow of a Player vs Player match, according
+# to the state of a given Board.
 def play_pvp(board):
     print("Player 1 Turn!\n")
     displayBoard(board)
@@ -27,14 +32,18 @@ def play_pvp(board):
         else:
             play_pvp(board)
 
+# This method will create a board according to the number of pieces per player.
 def createBoard(piecesPerPlayer):
     board = gameboard.create(piecesPerPlayer)
     return board
 
+# This method will display the given board on the terminal.
 def displayBoard(board):
     gameboard.display(board)
     return
             
+# This method will ensure the choice and movement of a piece according to
+# the player who is playing in a given board, and change the player's turn.
 def turn(player,board):
     piece = (-1,-1)
     while (piece == (-1,-1)):
@@ -45,6 +54,8 @@ def turn(player,board):
     board = make_move(piece, move, board)
     return board
 
+# This method will ensure the choice of a piece in according the current player
+# in the limits of a given board.
 def choose_piece(player, board):
     print("\nWhich piece do you want to move?\n")
     x = int(input("X:"))
@@ -61,6 +72,8 @@ def choose_piece(player, board):
         print("That is not a piece of yours! Try again.\n")
         return (-1,-1)
 
+# This method will ensure the final position after the movement of the
+# chosen piece by the current player in the limits of a given board.
 def choose_move(player, piece, board):
     markedBoard = gameboard.markSpots(board, calculateValidMoves(piece, board))
     displayBoard(markedBoard)
@@ -79,24 +92,31 @@ def choose_move(player, piece, board):
         print("That is not a valid move! Try again.\n")
         return (-1,-1)
         
+# This method will make the move of a piece according to the given move in the
+# input board.
 def make_move(piece,move,board):
-    #Assumindo que o move é válido
+    #Assuming that the move is valid.
     board = gameboard.make_move(piece, move, board)
     return board
     
+# This method will ensure that a move belongs to the valid ones of a given piece
+# in the input board.
 def isValidMove(piece,move,board):
     return (move in calculateValidMoves(piece, board))
     
+# This method determines the valid moves a piece in the given board.
 def calculateValidMoves(piece,board):
     moves = gameboard.calculateValidMoves(piece, board)
     return moves
 
+# This method checks if a piece in the given board belongs to the input player.
 def isPlayerPiece(player,board,piece):
     if (int(player) == 1):
         return (board[piece[1]][piece[0]] == 'A')
     elif (player == 2):
         return (board[piece[1]][piece[0]] == 'B')
 
+# This method checks if a player has lost, according to the state of the board.
 def hasLost(player,board):
     if (player == 1):
         char = 'A'
@@ -113,11 +133,14 @@ def hasLost(player,board):
         y += 1
     return False
 
+# This method displays the victory message to the winner.
 def victory(player):
     print("Player " + str(player) + " wins!\n")
     print("Returning to menu")
 
-
+# This method ensures the game logic of the game in Player vs PC mode, given a 
+# board and the tree depth of the decision game tree of the PC, which is defined
+# by its difficulty.
 def play_pve(board, treeDepth):
     print("Player 1 Turn!\n")
     displayBoard(board)
@@ -144,7 +167,9 @@ def play_pve(board, treeDepth):
         else:
             play_pve(board, treeDepth)
 
-
+# This method ensures the game logic of the game in PC vs PC mode, given a 
+# board and the tree depth of the decision game tree of both PC's, which are defined
+# by their difficulty.
 def play_eve(board, treeDepth_A, treeDepth_B):
     print("Computer 1 Turn!\n")
     displayBoard(board)
@@ -184,11 +209,9 @@ def play_eve(board, treeDepth_A, treeDepth_B):
             displayBoard(board)
             time.sleep(1)
             play_eve(board, treeDepth_A, treeDepth_B)
-    
-    
-
-
         
+# This method will start a Player vs PC match, according to the chosen difficulty
+# and boardSize.
 def start_pve(boardSize,difficulty):
 
     board = createBoard(boardSize)
@@ -202,7 +225,8 @@ def start_pve(boardSize,difficulty):
 
     play_pve(board, depth)
     
-    
+# This method will start a PC vs PC match, according to the chosen PC's' difficulty
+# and boardSize.  
 def start_eve(boardSize, dif_A, dif_B):
     board =createBoard(boardSize)
     depth_A = 0

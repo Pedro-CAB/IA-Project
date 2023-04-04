@@ -138,13 +138,13 @@ def evaluate(piece, move, board):
     #             if(board[row][col] == 'A' or board[row][col] == 'B'):
     #                 getBlockedDirections((col,row), board)
     
-    opponent_old_board_value, my_old_board_value = getBoardValue(piece, board);
+    opponent_old_board_value, my_old_board_value = getAlternativeBoardValue(piece, board);
     
     board = gameboard.make_move(piece, move, board);
 
     # print("\n\n-----------------\nA MOVE WAS MADE\n-----------------\n\n")
     
-    opponent_new_board_value, my_new_board_value = getBoardValue(move, board);
+    opponent_new_board_value, my_new_board_value = getAlternativeBoardValue(move, board);
     
     # print("\nopponent_old_board_value: "+ str(opponent_old_board_value)+ "\nmy_old_board_value: "+str(my_old_board_value)+"\nopponent_new_board_value: "+str(opponent_new_board_value)+"\nmy_new_board_value: "+str(my_new_board_value))
     
