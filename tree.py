@@ -1,120 +1,147 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-#To be decided later
-class Piece:
+import gameboard
+import game
+import utils
+import random
 
-    def __init_(self, player):
-        self.player = player #Can be 'A' for Player 1 or 'B' for Player 2
-        self.id = 0
-        self.x = 0
-        self.y = 0
-        self.blocked_directions = 0
-        
-    def set_player(self, c):
-        self.player = c
-        
-    def set_coordinates(self, x,y):
-        self.x = x
-        self.y = y
-
+# Class Node of a Tree
 class Node:
     
-    def __init__(self, id, value):
+    def __init__(self, id, board, piece, depth):
         self.id = id
-        self.value = value
+        self.board = board
+        self.piece = piece
         self.visited = False
-        self.depth = 0
+        self.depth = depth
         self.edges = []
         
     def set_depth(self, depth):
         self.depth = depth
         
-    def set_value(self, value):
-        self.value = value
-        
-    def addEdge(self, dest):
-        dest.set_depth(self.depth + 1)
-        self.edges.append(dest)
+    def get_depth(self):
+        return self.depth
         
     def allEdges(self):
+        random.shuffle(self.edges)
         return self.edges
         
     def printEdges(self):
         for edge in self.edges:
-            print((self.id, edge.id))
+            print((self.piece, edge.origin))
+            print("Depth:")
+            print(self.depth)
+            gameboard.display(edge.node.board)
+            print('-----------')
             
     def isEmpty(self):
         return len(self.edges) == 0
-        
     
+    def printBoard(self):
+        return gameboard.display(self.board)
+    
+# Class Edge betweeen Nodes of a Tree
+class Edge:
 
+    def __init__(self, origin, node):
+        self.origin = origin 
+        self.node = node
+
+# Class of a game Tree
 class Tree:
     
    def __init__(self):
-       self.nodes = set()
-       self.edges = []
+       self.nodes = []
        
-
    def addNode(self, node):
-       self.nodes.add(node)
+       self.nodes.append(node)
        
-   def addEdge(self, s, d):
-       if s in self.nodes and b in self.nodes:
-           s.addEdge(d)
-           return 0
+   def addEdge(self, s, d, piece):
+       if s in self.nodes and d not in self.nodes:
+            e = Edge(piece, d)
+            d.set_depth(s.depth + 1)
+            s.edges.append(e)
+            self.nodes.append(d)
+            return 0
        else:
-           return -1
+            return -1
        
    def printAllEdges(self):
        for n in self.nodes:
            n.printEdges()
-       
-        
-t = Tree()
+           
+   def addTree(self, s1, s2):
+       self.addEdge(s1, s2)
 
-a = Node(1,10)
-
-b = Node(2,40)
-
-c = Node(3,45)
-
-
-t.addNode(a)
-t.addNode(b)
-t.addNode(c)
-
-t.addEdge(a, b)
-t.addEdge(a, c)
-t.addEdge(b, c)
-
-t.printAllEdges()
-
-
-def minimax(node, depth, alpha, beta, maximising, player, maxPlayer, eval_func):
-    if depth == 0 or node.isEmpty():
-        return eval_func(node) * (1 if player == 'A' else -1)
+# This method will generate the possible boards for all possible moves of the
+# pieces of the input player and stores them in a dictionary.
+def nextPlayerBoardsGen(board, player):
     
-    if maximising:
-        max_eval = float('-inf')
-        for move in node.allEdges():
-            new_node = 1 #TODO Usar o move (o outro nó)
-            evaluate = minimax(new_node, depth-1, alpha, beta, False, player, eval_func)
-            max_eval = max(alpha, evaluate)
-            alpha = max(alpha, evaluate)
-            if beta <= alpha:
-                break
-            return max_eval
+    m = {}
+    
+    pieces = gameboard.getPieceCoords(board, player)
+    
+    for piece in pieces:
+        
+        new_boards = []
+        
+        possible_moves = gameboard.calculateValidMoves(piece, board)
+        
+        possible_moves = utils.removeDuplicates(possible_moves)
+        
+        move = ()
+        
+        for move in possible_moves:
+            
+            new_board = game.make_move(piece, move, board)
+            
+            new_boards.append(new_board)
+            
+        m[(piece, move)] = list(new_boards)
+        
+    return m
 
-    #Minimimsing (opponent's turn)
-    else:
-        min_eval = float('inf')
-        for move in node.allEdges():
-            new_node = 2 #TODO
-            evaluate = minimax(new_node, depth-1, alpha, beta, True, player, eval_func)
-            min_eval = min(beta, evaluate)
-            beta = min(beta, evaluate)
+# This method will create the Game Tree, starting by the board stored in 
+# the initial node Init and generate the possible moves with the help of 
+# nextPlayerBoardsGen(board, player). For each move create there, it creates
+# another tree recursively and alternating the player, in order to make the 
+# Min and Max layers
+def createGameTree(board, player, depth, tree, init):
+    
+    if (init is None):
+   
+        init = Node(1, board, None, 1)
+    
+        tree.addNode(init)
+             
+    index = 2    
+    while (depth > 0):
+                
+        maps = nextPlayerBoardsGen(board, player)        
+        new_boards = maps.values()
+        
+        for list_per_piece in new_boards:            
+        
+            (piece, move) = list(filter(lambda x: maps[x] == list_per_piece, maps))[0]
             
-            if beta <= alpha:
-                break
-            return min_eval
+            random.shuffle(list_per_piece)
             
+            for b in list_per_piece:                
+
+                node = Node(index,b, move, init.get_depth() + 1)
+                tree.addEdge(init, node, piece)
+                
+                if player == 1:
+                    
+                    tree = createGameTree(b, 2, depth - 1, tree, node)
+                
+                else:
+                    
+                    tree = createGameTree(b, 1, depth - 1, tree, node)
+                
+                depth -= 1
+                
+                index += 1
+   
+    return tree

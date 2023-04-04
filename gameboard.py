@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import utils
+import copy
 
+# This method will create a board according to the number of pieces per player.
 def create(piecesPerPlayer):
     #Assume-se que o piecesPerPlayer já foi verificado e é par e >= 4
     upperLine =     ['/','A','O','A','\\']
@@ -15,6 +17,7 @@ def create(piecesPerPlayer):
         piecesPerPlayer -= 2
     return board
 
+# This method will create the circle lines of the given board.
 def extend(board):
     circles = (len(board) // 2)
     firstLine = (circles * ['/']) + ['A','O','A'] + (circles * ['\\'])
@@ -26,6 +29,7 @@ def extend(board):
     board.append(lastLine)
     return board
 
+# This method will ensure the display of the given board on the terminal.
 def display(board):
     side = len(board)
     header = [str(x) for x in range(side)]
@@ -39,10 +43,12 @@ def display(board):
         i += 1
     return
 
+# This method will show the valid positions a piece can move in a given board.
 def displayMarked(piece,board):
     display(markSpots(board, calculateValidMoves(piece, board)))
     return
 
+# This method will mark the valid position in a board.
 def markSpots(board,spots):
     x = y = 0
     markedBoard = []
@@ -58,18 +64,23 @@ def markSpots(board,spots):
         y += 1
     return markedBoard
 
+# This method will ensure a piece will move to the final position in
+# move variable, in a given board.
 def make_move(piece,move,board):
     #Assumindo que o move é válido
+    new_board = copy.deepcopy(board)
     xi = piece[0]
     yi = piece[1]
     xf = move[0]
     yf = move[1]
-    pieceChar = board[yi][xi]
-    spotChar = board[yf][xf]
-    board[yi][xi] = spotChar
-    board[yf][xf] = pieceChar
-    return board
+    pieceChar = new_board[yi][xi]
+    spotChar = new_board[yf][xf]
+    new_board[yi][xi] = spotChar
+    new_board[yf][xf] = pieceChar
+    return new_board
 
+# This method will determine the valid final positions a piece can move in a
+# given board.
 def calculateValidMoves(piece,board):
     moves = []
     increment = 1
@@ -111,6 +122,8 @@ def calculateValidMoves(piece,board):
     utils.removeDuplicates(moves)
     return moves
 
+# This method will determine the moves a piece can make through the circle lines
+# in a given board.
 def calculateCircleMoves(piece,board):
     side = len(board)
     moves = []
@@ -123,7 +136,7 @@ def calculateCircleMoves(piece,board):
     middle = middleOfSide(len(board)) - 1
     if identifySector(piece, board) == 1:
         if (x == middle):
-            clockwise += (x+1,y,board[y][x+1])
+            clockwise += [(x+1,y,board[y][x+1])]
             final = [(x-1,y,board[y][x-1])]
         elif (x == middle - 1):
             clockwise += [(x+1,y,board[y][x+1]),(x+2,y,board[y][x+2])]
@@ -141,7 +154,7 @@ def calculateCircleMoves(piece,board):
         clockwise += b
     elif identifySector(piece, board) == 2:
         if (y == middle):
-            clockwise += (x,y+1,board[y+1][x])
+            clockwise += [(x,y+1,board[y+1][x])]
             final = [(x,y-1,board[y-1][x])]
         elif (y == middle - 1):
             final = [(x,y+2,board[y+2][x]),(x,y+1,board[y+1][x])]
@@ -155,8 +168,8 @@ def calculateCircleMoves(piece,board):
         clockwise += utils.extractLin(board, upperLine) + utils.extractCol(board, rightCol) + a
     elif identifySector(piece, board) == 4:
         if (y == middle):
-            final = (x,y+1,board[y+1][x])
-            clockwise += (x,y-1,board[y-1][x])
+            final = [(x,y+1,board[y+1][x])]
+            clockwise += [(x,y-1,board[y-1][x])]
         elif (y == middle - 1):
             clockwise += [(x,y+1,board[y+1][x]),(x,y+2,board[y+2][x])]
             final = []
@@ -171,8 +184,8 @@ def calculateCircleMoves(piece,board):
         clockwise += a + b + utils.extractLin(board, upperLine)
     elif identifySector(piece, board) == 5:
         if (x == middle):
-            final = (x+1,y,board[y][x+1])
-            clockwise += (x-1,y,board[y][x-1])
+            final = [(x+1,y,board[y][x+1])]
+            clockwise += [(x-1,y,board[y][x-1])]
         elif (x == middle - 1):
             final = [(x+2,y,board[y][x+2]),(x+1,y,board[y][x+1])]
         elif (x == middle + 1):
@@ -190,6 +203,8 @@ def calculateCircleMoves(piece,board):
     reverse.reverse()
     return utils.discardBlockedMoves(clockwise) + utils.discardBlockedMoves(reverse)
 
+# This method will separate the board in Sectors and calculate the sector of the
+# given board where the piece is.
 def identifySector(piece,board):
     side = len(board)
     middle = middleOfSide(side)
@@ -211,6 +226,8 @@ def identifySector(piece,board):
         else: return 0
     else: return 0
 
+# This method will recalculate the coordinates, according to the size of the
+# given board.
 def adjustCoordToSize(coord, board):
     size = len(board)
     if (coord < 0):
@@ -223,7 +240,8 @@ def adjustCoordToSize(coord, board):
         return coord
     else:
         return coord
-
+    
+# This methos will determine the middle of the board, according to its size.
 def middleOfSide(side):
     decimal = side / 2
     integer = side // 2
@@ -231,3 +249,28 @@ def middleOfSide(side):
         return integer + 1
     else:
         return integer
+    
+# This method will get the coordinates of all pieces in the board.
+def getAllPieceCoords(board):
+    return getPieceCoords(board,1) + getPieceCoords(board,2)
+    
+# This method will return the coordinates of the pieces of a player, in a given
+# board.
+def getPieceCoords(board, player):
+    coords = []
+    if player == 1:
+        char = 'A'
+    elif player == 2:
+        char = 'B'
+    else:
+        return []
+    x = y = 0
+    for line in board:
+        for spot in line:
+            if spot == char:
+                coords.append((x,y))
+            x += 1
+        x = 0
+        y += 1
+    return coords
+        
