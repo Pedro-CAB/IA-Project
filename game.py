@@ -170,12 +170,12 @@ def play_pve(board, treeDepth, heuristic):
 # This method ensures the game logic of the game in PC vs PC mode, given a 
 # board and the tree depth of the decision game tree of both PC's, which are defined
 # by their difficulty.
-def play_eve(board, treeDepth_A, treeDepth_B):
+def play_eve(board, treeDepth_A, treeDepth_B, heuristic):
     print("Computer 1 Turn!\n")
     displayBoard(board)
     t = tree.Tree()
     game_tree = tree.createGameTree(board, 1, treeDepth_A, t, None)
-    res_minimax = minimax.minimax(None, treeDepth_A, float('-inf'), float('inf'), True, 1, game_tree.nodes[0], board, evaluate.evaluate)
+    res_minimax = minimax.minimax(None, treeDepth_A, float('-inf'), float('inf'), True, 1, game_tree.nodes[0], board, evaluate.evaluate, heuristic)
 
 
     board = res_minimax[1]
@@ -194,7 +194,7 @@ def play_eve(board, treeDepth_A, treeDepth_B):
         time.sleep(1)
         t = tree.Tree()
         game_tree = tree.createGameTree(board, 2, treeDepth_B, t, None)
-        res_minimax = minimax.minimax(None, treeDepth_B, float('-inf'), float('inf'), True, 2, game_tree.nodes[0], board, evaluate.evaluate)
+        res_minimax = minimax.minimax(None, treeDepth_B, float('-inf'), float('inf'), True, 2, game_tree.nodes[0], board, evaluate.evaluate, heuristic)
 
         board = res_minimax[1]
         
@@ -208,7 +208,7 @@ def play_eve(board, treeDepth_A, treeDepth_B):
         else:
             displayBoard(board)
             time.sleep(1)
-            play_eve(board, treeDepth_A, treeDepth_B)
+            play_eve(board, treeDepth_A, treeDepth_B, heuristic)
         
 # This method will start a Player vs PC match, according to the chosen difficulty
 # and boardSize.
@@ -227,7 +227,7 @@ def start_pve(boardSize,difficulty, eval_func):
     
 # This method will start a PC vs PC match, according to the chosen PC's' difficulty
 # and boardSize.  
-def start_eve(boardSize, dif_A, dif_B):
+def start_eve(boardSize, dif_A, dif_B, eval_func):
     board =createBoard(boardSize)
     depth_A = 0
     if(dif_A == 1):
@@ -245,7 +245,7 @@ def start_eve(boardSize, dif_A, dif_B):
     else:
         depth_B = 6
     
-    play_eve(board, depth_A, depth_B)
+    play_eve(board, depth_A, depth_B, eval_func)
     
     
     

@@ -94,7 +94,7 @@ def choose_difficulty_c(boardSize):
         print("Invalid Input. Try Again.\n")
         choose_difficulty_c(boardSize)
         
-    game.start_eve(boardSize, dif_A, dif_B)
+    game.start_eve(boardSize, dif_A, dif_B, evaluate.getBoardValue)
     
 
 # This method will allow user choose the difficulty of the PC in the second
